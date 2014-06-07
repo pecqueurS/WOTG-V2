@@ -1,9 +1,9 @@
 <?php
 
-namespace WOTG\Controllers;
+namespace WotG\Controllers;
 
 use Bundles\Formulaires\Forms;
-use WOTG\Bundles\Profil\Profil;
+use WotG\Bundles\Profil\Profil;
 /**
 * 
 */

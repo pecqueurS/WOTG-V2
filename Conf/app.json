@@ -61,30 +61,32 @@
             "BUNDLES": "dirname(PARAM).DS",
 
             "ROOT": "dirname(BUNDLES).DS",
-            "WEBROOT": "ROOT.'www'.DS",
-            
-            
+                        
             "BDD": "BUNDLES.'Bdd'.DS",
-            "CALCULS": "BUNDLES.'Calculs'.DS",
-            "FUNCTIONS": "BUNDLES.'Functions'.DS",
-            "GAME": "BUNDLES.'game'.DS",
-            "PROFIL": "BUNDLES.'Profil'.DS",
             "TEMPLATES": "BUNDLES.'Templates'.DS",
-            "CONTENU": "TEMPLATES.'contenu'.DS",
             
             
-            "AJAX": "BUNDLES.'Ajax'.DS",
-            "ADMIN": "BUNDLES.'Administration'.DS",
 
             "CTRL": "ROOT.'Controllers'.DS",
+
+            
+            "APP": "ROOT.'App'.DS",
+            "WEBROOT": "APP.'WotG'.DS.'www'.DS",
+            "FORMS": "APP.'WotG'.DS.'Conf'.DS.'Formulaires'.DS",
 
             "AVATARS": "WEBROOT.'images'.DS.'avatars'.DS",
 
             "URL_ERR": "WEBROOT.'error'.DS.'404.html'",
             "URL_ERR500": "WEBROOT.'error'.DS.'500.html'",
 
-            "APP": "ROOT.'App'.DS",
-            "FORMS": "APP.'WotG'.DS.'Conf'.DS.'Formulaires'.DS"
+            "CALCULS": "BUNDLES.'Calculs'.DS",
+            "FUNCTIONS": "BUNDLES.'Functions'.DS",
+            "GAME": "BUNDLES.'game'.DS",
+            "PROFIL": "BUNDLES.'Profil'.DS",
+            "AJAX": "BUNDLES.'Ajax'.DS",
+            "ADMIN": "BUNDLES.'Administration'.DS"
+            
+
 
         }
 

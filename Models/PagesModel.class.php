@@ -1,7 +1,7 @@
 <?php
 
 
-namespace WOTG\Models;
+namespace WotG\Models;
 
 use Bundles\Bdd\Db;
 use Bundles\Bdd\Model;

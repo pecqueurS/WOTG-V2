@@ -1,6 +1,6 @@
 <?php
 
-namespace WOTG\Bundles\Profil;
+namespace WotG\Bundles\Profil;
 
 use Bundles\Bdd\BDD;
 

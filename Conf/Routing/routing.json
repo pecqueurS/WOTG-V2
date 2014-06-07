@@ -14,25 +14,25 @@
 	"confirmInscript": {
 		"url": "/confirmInscript",
 		"constant": "URL_CONFIRM_INS",
-		"controller":"Controllers\\Home::showConfirmInscript"
+		"controller":"WotG\\Controllers\\Home::showConfirmInscript"
 	},
 
 	"envoimail": {
 		"url": "/envoimail",
 		"constant": "URL_ENV_MAIL",
-		"controller":"Controllers\\Home::showSendMail"
+		"controller":"WotG\\Controllers\\Home::showSendMail"
 	},
 
 	"forgot_pwd": {
 		"url": "/forgot_pwd",
 		"constant": "URL_FORGOT_PWD",
-		"controller":"Controllers\\Home::showForgotPwd"
+		"controller":"WotG\\Controllers\\Home::showForgotPwd"
 	},
 
 	"recupPwd": {
 		"url": "/recupPwd",
 		"constant": "URL_RECUP_PWD",
-		"controller":"Controllers\\Home::showGetNewPwd"
+		"controller":"WotG\\Controllers\\Home::showGetNewPwd"
 	},
 
 
@@ -40,13 +40,13 @@
 	"inscription": {
 		"url": "/inscription",
 		"constant": "URL_INSCRIPT",
-		"controller":"Controllers\\Profil::showInscription"
+		"controller":"WotG\\Controllers\\Profil::showInscription"
 	},
 
 	"profil": {
 		"url": "/profil",
 		"constant": "URL_PROFIL",
-		"controller":"Controllers\\Profil::showProfil"
+		"controller":"WotG\\Controllers\\Profil::showProfil"
 	},
 
 
@@ -54,31 +54,31 @@
 	"createGame": {
 		"url": "/createGame",
 		"constant": "URL_CREATE",
-		"controller":"Controllers\\Game::showCreateGame"
+		"controller":"WotG\\Controllers\\Game::showCreateGame"
 	},
 
 	"joinGame": {
 		"url": "/joinGame",
 		"constant": "URL_JOIN",
-		"controller":"Controllers\\Game::showJoinGame"
+		"controller":"WotG\\Controllers\\Game::showJoinGame"
 	},
 
 	"waitGame": {
 		"url": "/waitGame",
 		"constant": "URL_WAIT",
-		"controller":"Controllers\\Game::showWaitGame"
+		"controller":"WotG\\Controllers\\Game::showWaitGame"
 	},
 
 	"game": {
 		"url": "/game",
 		"constant": "URL_GAME",
-		"controller":"Controllers\\Game::showGame"
+		"controller":"WotG\\Controllers\\Game::showGame"
 	},
 
 	"endOfGame": {
 		"url": "/endOfGame",
 		"constant": "URL_FIN",
-		"controller":"Controllers\\Game::showEndOfGame"
+		"controller":"WotG\\Controllers\\Game::showEndOfGame"
 	},
 
 
@@ -86,31 +86,31 @@
 	"about": {
 		"url": "/about",
 		"constant": "URL_ABOUT",
-		"controller":"Controllers\\Aside::showAbout"
+		"controller":"WotG\\Controllers\\Aside::showAbout"
 	},
 
 	"plan": {
 		"url": "/plan",
 		"constant": "URL_PLAN",
-		"controller":"Controllers\\Aside::showMapSite"
+		"controller":"WotG\\Controllers\\Aside::showMapSite"
 	},
 
 	"informations": {
 		"url": "/informations",
 		"constant": "URL_INFO",
-		"controller":"Controllers\\Aside::showInformations"
+		"controller":"WotG\\Controllers\\Aside::showInformations"
 	},
 
 	"abus": {
 		"url": "/abus",
 		"constant": "URL_ABUS",
-		"controller":"Controllers\\Aside::showAbus"
+		"controller":"WotG\\Controllers\\Aside::showAbus"
 	},
 
 	"bug": {
 		"url": "/bug",
 		"constant": "URL_BUG",
-		"controller":"Controllers\\Aside::showBug"
+		"controller":"WotG\\Controllers\\Aside::showBug"
 	},
 
 
