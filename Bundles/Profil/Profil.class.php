@@ -63,7 +63,7 @@ class Profil {
 				$_SESSION['message'] = $erreur;
 				$fichier_final = "avatarDefault.png";
 			} else {
-			    $fichier_final = $this->convertJPG($_FILES['avatar']['tmp_name'],AVATARS);
+			    $fichier_final = ConvertImg::init($_POST['login'], array(200,200))->convertJPG('avatar',AVATARS);
 			}
 			
 		} else {
@@ -524,89 +524,7 @@ class Profil {
 
 
 
-/**
-	 * ************** HASHING *******************
-	 */	
-	
-	/**
-	 * algo($mdp) algo
-	 * Ex : 'jean-paul' -> '5ORJpIwFYJlCIBbBoB'
-	 * @param STR $mdp
-	 * @return STR
-	 */
-	private function algo($mdp){
-		$arr1 = str_split($mdp);
-		$arr2 = array();
-		$count = count($arr1);
-	
-		$lettre = array();
-		for ($i=65 ;$i<=90;$i++){
-			$lettre[] = chr($i);
-		}
-		for ($i=48 ;$i<=57;$i++){
-			$lettre[] = chr($i);
-		}
-		for ($i=97 ;$i<=122;$i++){
-			$lettre[] = chr($i);
-		}
-	
-		$code_int1 ='';
-	
-		for ($i=0;$i<$count;$i++){
-			$arr1[$i] = ord ($arr1[$i]);
-			$arr2[$i] = intval((pow ($i+10, 4)*($i+7))/$arr1[$i]);
-			$arr2[$i] = str_pad($arr2[$i], 6, "001", STR_PAD_LEFT);
-			$arr3[$i] = str_split($arr2[$i],3);
-			$a = ((($arr3[$i][0])%61));
-			$b = ((($arr3[$i][1])%61));
-	
-			$code_int1 .= $lettre[$a];
-			$code_int1 .= $lettre[$b];
-		}
-		$code_int2 = strrev ($code_int1);
-	
-		return $code_int2;
-	}
-	
-	/**
-	 * code($mdp) code
-	 * Ex : '5ORJpIwFYJlCIBbBoB' -> 'AKC5OEQORJzi4pIXNqwFszJYJb6alClPCIBFbobBWItoB'
-	 * @param STR $mdp
-	 * @return STR
-	 */
-	private function code($mdp){
-	
-	
-		$code_array = str_split($mdp,2);
-		$count = count($code_array);
-		$code_fini = '';
-		for ($i=0;$i<$count;$i++){
-			$random = substr(str_shuffle(str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',3)),0,3);
-			$code_fini .= $random.$code_array[$i];
-		}
-	
-		return $code_fini;
-	}
-	
-	/**
-	 * decode ($mdp) decode
-	 * Ex : 'AKC5OEQORJzi4pIXNqwFszJYJb6alClPCIBFbobBWItoB' -> '5ORJpIwFYJlCIBbBoB'
-	 * @param STR $mdp
-	 * @return STR
-	 */
-	private function decode ($mdp){
-		$code_array = str_split($mdp,5);
-		$count = count($code_array);
-		$code_fini = '';
-		for ($i=0;$i<$count;$i++){
-			$code_fini .= substr($code_array[$i], -2);
-		}
-		return $code_fini;
-	}
-	
-	
-			
-	
+
 	
 
 
@@ -621,79 +539,13 @@ class Profil {
 	private function envoi_mail($message,$objet){
  		global $config;
 		$destinataire = $this->post["email"];
- 		$sujet = 'Inscription à "My Accounts & Budgets"' ;
+ 		$sujet = 'Inscription à "Warriors of the Galaxy"' ;
  		$entete = "From: stephane.pecqueur@gmail.com" ;
  		
 		return mail($destinataire, $objet, $message, $entete) ;
 	}
 	
 
-
-	/**
-	 * Creation image uploadé
-	 */
-	public function convertJPG($chemin_img,$dossier_Dest){
-		
-		switch ( strtolower( pathinfo( $_FILES["avatar"]["name"], PATHINFO_EXTENSION ))) {
-	        case 'jpeg':
-	        case 'jpg':
-	            $source =  imagecreatefromjpeg($chemin_img);
-	        break;
-
-	        case 'png':
-	            $source =  imagecreatefrompng($chemin_img);
-	        break;
-
-	        case 'gif':
-	            $source =  imagecreatefromgif($chemin_img);
-	        break;
-	    }		
-
-		// $source = imagecreatefromjpeg($chemin_img); // La photo est la source
-
-		$image = imagecreatetruecolor(200, 200); // Creation de l'image de sortie
-
-		// Declaration couleur
-		$blanc = imagecolorallocate($image, 255, 255, 255);
-		// Couleur de fond
-		$fond = ImageFilledRectangle ($image,0, 0, imagesx($image),imagesy($image), $blanc);
-
-
-		// On crée la miniature vide
-		// Les fonctions imagesx et imagesy renvoient la largeur et la hauteur d'une image
-		$largeur_source = imagesx($source);
-		$hauteur_source = imagesy($source);
-
-		$largeur_destination = imagesx($image)-30;
-		$hauteur_destination = imagesy($image)-30;
-
-		$marge_supp_left = 0;
-		$marge_supp_top = 0;
-
-		if($largeur_source<$hauteur_source) { // SI PORTRAIT
-			$rapport = $hauteur_destination/$hauteur_source;
-			$futur_largeur = $largeur_source*$rapport;
-			$marge_supp_left = round(($largeur_destination-$futur_largeur)/2);
-			$largeur_destination = $futur_largeur;
-		} else { // SI PAYSAGE ou CARRE
-			$rapport = $largeur_destination/$largeur_source;
-			$futur_hauteur = $hauteur_source*$rapport;
-			$marge_supp_top = round(($hauteur_destination-$futur_hauteur)/2);
-			$hauteur_destination = $futur_hauteur;
-		}
-
-
-		$name = $this->post["login"].'.jpg';
-
-		// On crée la miniature
-		imagecopyresampled($image, $source, (15+$marge_supp_left), (15+$marge_supp_top), 0, 0, $largeur_destination,$hauteur_destination, $largeur_source,$hauteur_source);
-
-		// On enregistre la miniature sous le nom $name
-		imagejpeg($image,$dossier_Dest.$name);
-
-		return $name;
-
-	}
 
 
 
