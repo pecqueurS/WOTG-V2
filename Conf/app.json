@@ -1,5 +1,5 @@
 {
-    "appName": "WOTG",
+    "appName": "WotG",
     "serveurs" : {
         "windows": {
             "protocole": "http",
@@ -60,7 +60,7 @@
 
             "BUNDLES": "dirname(PARAM).DS",
 
-            "ROOT": "dirname (BUNDLES).DS",
+            "ROOT": "dirname(BUNDLES).DS",
             "WEBROOT": "ROOT.'www'.DS",
             
             
@@ -81,10 +81,10 @@
             "AVATARS": "WEBROOT.'images'.DS.'avatars'.DS",
 
             "URL_ERR": "WEBROOT.'error'.DS.'404.html'",
-            "URL_ERR500": "WEBROOT.'error'.DS.'500.html'"
+            "URL_ERR500": "WEBROOT.'error'.DS.'500.html'",
 
             "APP": "ROOT.'App'.DS",
-            "FORMS": "APP.'WOTG'.DS.'Conf'.DS.'Formulaires'.DS",
+            "FORMS": "APP.'WotG'.DS.'Conf'.DS.'Formulaires'.DS"
 
         }
 

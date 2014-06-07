@@ -1,14 +1,14 @@
 {
 	"webroot": {
 		"url": "/",
-		"controller":"WOTG\\Controllers\\Home::showHome",
+		"controller":"WotG\\Controllers\\Home::showHome",
 		"loadUrl": "/accueil"
 	},
 
 	"accueil": {
 		"url": "/accueil",
 		"constant": "URL_ACCUEIL",
-		"controller":"WOTG\\Controllers\\Home::showHome"
+		"controller":"WotG\\Controllers\\Home::showHome"
 	},
 
 	"confirmInscript": {
