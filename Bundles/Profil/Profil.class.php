@@ -2,7 +2,12 @@
 
 namespace WotG\Bundles\Profil;
 
-use Bundles\Bdd\BDD;
+use WotG\Models\ProfilModel;
+use WotG\Models\VerifConnections;
+use WotG\Models\Connectes;
+
+use WotG\Services\Encryptor\Encryptor;
+use WotG\Services\Timer\Timer;
 
 class Profil {
 
@@ -240,72 +245,36 @@ class Profil {
 
 
 	public function connexion($post) {
-		$bdd = new BDD();
 
+		// Initialisation du profil
+		$profil = ProfilModel::init();
 
-		$sql = "SELECT jou_id,jou_login,jou_mdp,jou_email,jou_xp,jou_parties_id,jou_ready,jou_team,jou_langues_id,jou_avatar,jou_activate,jou_races_id FROM `joueurs` WHERE jou_login = ? ";
+		// Infos Joueur
+		$result = $profil->infosPlayer($post["login"])->getValues();
 
-	    $bind = "s";
-	  	$arr = array($post["login"]);
-	  
-	  	$bdd->prepare($sql,$bind);
-	  	$result = $bdd->execute($arr);
-		
-
-	  	if(!empty($result)) {
-	  			$mdp = $this->algo ($post["mdp"]);
-				$mdp2 = $this->decode($result[0]['jou_mdp']);
-
-				if($result[0]['jou_activate'] != 1) {
+		// Le login existe ?
+		if(!empty($result)) {
+				// Joueur Activé ?
+	  			if($result[0]['jou_activate'] != 1) {
 					if(isset($_SESSION["message"])) $_SESSION["message"] .= "Veuillez tout d'abord activer votre compte.";
 					else $_SESSION["message"] = "Veuillez tout d'abord activer votre compte.";
-
 					return FALSE;
 				}
 
+				// Verification du mot de passe
+				$mdp = Encryptor::crypt($post["pwd"]);
+				$mdp2 = Encryptor::decode($result[0]['jou_mdp']);
 
-
-
-				if($mdp != $mdp2) return FALSE;
-
-
-				$ip_client = $_SERVER['REMOTE_ADDR'];
-				$id_joueur = $result[0]["jou_id"];
+				if($mdp != $mdp2) {
+					$_SESSION["message"] = "Login ou mot de passe incorrect.";
+					return FALSE;
+				}
 
 				/*INSERTION EN BDD DU NOUVEL INSCRIT*/
-				$sql = "INSERT INTO `verif_connections` VALUES ( NULL,  ? , CURRENT_TIMESTAMP , ? , NULL , ? )";
+				$result2 = VerifConnections::init()->insert($result[0]["jou_id"]);
+				$result4 = Connectes::init()->insert($result[0]["jou_id"]);
 
-			    $bind = "iss";
-			  	$arr = array($id_joueur, $ip_client, session_id());
-			  
-			  	$bdd->prepare($sql,$bind);
-			  	$result2 = $bdd->execute($arr);
-
-
-
-				$sql = "SELECT con_joueurs_id FROM connectes WHERE con_joueurs_id = ? ";
-
-			    $bind = "i";
-			  	$arr = array($id_joueur);
-			  
-			  	$bdd->prepare($sql,$bind);
-			  	$result3 = $bdd->execute($arr);
-
-			  	if(empty($result3)) {
-
-					$sql = "INSERT INTO `connectes` VALUES ( NULL,  ? , CURRENT_TIMESTAMP )";
-
-				    $bind = "i";
-				  	$arr = array($id_joueur);
-				  
-				  	$bdd->prepare($sql,$bind);
-				  	$result4 = $bdd->execute($arr);
-
-			  	} else {
-			  		$result4 = true;
-			  	}
-
-
+			  	// Mise en session des informations et confirmation de la connexion si $result2 && $result4 = true
 			  	if($result2 && $result4) {
 			  		$_SESSION["joueur"] = $result[0];
 			  		if($_SESSION["joueur"]["jou_langues_id"]==1) $_SESSION["lang"] = "fr";
@@ -313,28 +282,18 @@ class Profil {
 			  	} else {
 					if(isset($_SESSION["message"])) $_SESSION["message"] .= "Une erreur est survenue.";
 					else $_SESSION["message"] = "Une erreur est survenue.";
-
 					return FALSE;
-
 			  	}
-
-
-				
-
-
 				return TRUE;
-
-
 	  	} else {
+	  		$_SESSION["message"] = "Login ou mot de passe incorrect.";
 	  		return FALSE;
-
-
 	  	}
-
-
-
-
 	}
+
+
+
+
 
 	public function deconnect(){
 

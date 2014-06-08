@@ -22,11 +22,9 @@ class Home {
 		} else {
 			$profil = new Profil();
 			if($profil->connexion($_POST)){
-				echo "bingo";
-				//header("location:".URL_PROFIL);
+				header("location:".URL_PROFIL);
 			} else {
 				$response['formLogin'] = $loginForm->render();
-				echo "pas bingo";
 			}
 		}
 		return $response;
