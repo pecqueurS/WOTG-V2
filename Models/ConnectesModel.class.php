@@ -9,7 +9,7 @@ use Bundles\Bdd\Model;
 use WotG\Services\Timer\Timer;
 
 
-class Connectes extends Model {
+class ConnectesModel extends Model {
 
 	protected $tableName = "connectes";
 	
@@ -18,7 +18,7 @@ class Connectes extends Model {
 	}
 
 	public static function init() {
-		$mod = new Connectes();
+		$mod = new ConnectesModel();
 		return $mod;
 	}
 

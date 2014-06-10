@@ -88,6 +88,20 @@ Abstract class Encryptor {
 		}
 		return $code_fini;
 	}
+
+	public static function newPwd () {
+		$newPwd = substr(str_shuffle(str_repeat('0123456789',1)),0,1);
+		$newPwd .= substr(str_shuffle(str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZ',1)),0,1);
+		$newPwd .= substr(str_shuffle(str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',1)),0,8);
+		$newPwd .= substr(str_shuffle(str_repeat('abcdefghijklmnopqrstuvwxyz',1)),0,1);
+		$newPwd .= substr(str_shuffle(str_repeat('0123456789',1)),0,1);
+		$codePwd = self::code (self::crypt($newPwd));
+
+		return array(
+			'newPwd' 	=> $newPwd,
+			'encodePwd' => $codePwd
+		);
+	}
 	
 	
 	

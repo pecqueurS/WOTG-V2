@@ -3,11 +3,12 @@
 namespace WotG\Bundles\Profil;
 
 use WotG\Models\ProfilModel;
-use WotG\Models\VerifConnections;
-use WotG\Models\Connectes;
+use WotG\Models\VerifConnectionsModel;
+use WotG\Models\ConnectesModel;
 
 use WotG\Services\Encryptor\Encryptor;
 use WotG\Services\Timer\Timer;
+use WotG\Services\Mails\Mails;
 
 class Profil {
 
@@ -181,55 +182,33 @@ class Profil {
 
 	public function forgot_pwd($post) {
 
-		$bdd = new BDD();
+		// Initialisation du profil
+		$profil = ProfilModel::init();
 
-		$sql = "SELECT jou_login, jou_email  FROM `joueurs` WHERE jou_login = ? ";
+		// Infos Joueur
+		$result = $profil->infosPlayer($post["login"])->getValues();
 
-	    $bind = "s";
-	  	$arr = array($post["login"]);
-	  
-	  	$bdd->prepare($sql,$bind);
-	  	$result = $bdd->execute($arr);
-
-
+		// Si l'email ne correspond pas a la source
 	  	if(empty($result) || $result[0]["jou_email"] != $post["email"]) return false;
 
 	  	else {
-
-	  		$login = $post["login"];
-			$new_mdp = substr(str_shuffle(str_repeat('0123456789',1)),0,1);
-			$new_mdp .= substr(str_shuffle(str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZ',1)),0,1);
-			$new_mdp .= substr(str_shuffle(str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',1)),0,8);
-			$new_mdp .= substr(str_shuffle(str_repeat('abcdefghijklmnopqrstuvwxyz',1)),0,1);
-			$new_mdp .= substr(str_shuffle(str_repeat('0123456789',1)),0,1);
-			$int1= $this->algo ($new_mdp);
-			$code_mdp = $this->code ($int1);
-
-			$objet = 'Modification du mot de passe sur "Warriors of the Galaxy"' ;
-			$message = 	"Changement de mot de passe : \n
-			Votre login est : $login \n
-			Votre nouveau mot de passe est : $new_mdp \n
-			Vous pouvez modifier ce mot de passe dans la partie 'Mon Compte'";
-
-
+	  		// Creation d'un nouveau mot de passe
+	  		$newPwd = Encryptor::newPwd();
 
 			/*MODIFICATION MDP*/
-			$sql = "UPDATE joueurs SET jou_mdp = '$code_mdp' WHERE jou_login = ? ";
-
-		    $bind = "s";
-		  	$arr = array($login);
-		  
-		  	$bdd->prepare($sql,$bind);
-		  	$result = $bdd->execute($arr);
-
+			$result2 = $profil->setPlayer([$newPwd['encodePwd']], ['jou_mdp'], $result[0]['jou_id']);
 
 			/*ENVOI D'EMAIL*/
-			if (/*$this->envoi_mail($message,$objet)=== TRUE && */$result){
+			$destinataire = 'stephane.pecqueur@gmail.com';
+			$sujet = 'Ceci est un test';
+			$message = 'Texte dans le test';
+			$headers = array('moi', 'scarf666@msn.com');
+
+			if (Mails::init('txt')->sendMail($destinataire,$sujet,$message,$headers) === TRUE && $result2){
 				return TRUE;
 			}else {
 				return FALSE;
 			}
-
 
 
 
@@ -271,8 +250,8 @@ class Profil {
 				}
 
 				/*INSERTION EN BDD DU NOUVEL INSCRIT*/
-				$result2 = VerifConnections::init()->insert($result[0]["jou_id"]);
-				$result4 = Connectes::init()->insert($result[0]["jou_id"]);
+				$result2 = VerifConnectionsModel::init()->insert($result[0]["jou_id"]);
+				$result4 = ConnectesModel::init()->insert($result[0]["jou_id"]);
 
 			  	// Mise en session des informations et confirmation de la connexion si $result2 && $result4 = true
 			  	if($result2 && $result4) {

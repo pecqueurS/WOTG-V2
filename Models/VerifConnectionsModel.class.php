@@ -9,7 +9,7 @@ use Bundles\Bdd\Model;
 use WotG\Services\Timer\Timer;
 
 
-class VerifConnections extends Model {
+class VerifConnectionsModel extends Model {
 
 	protected $tableName = "verif_connections";
 	
@@ -18,7 +18,7 @@ class VerifConnections extends Model {
 	}
 
 	public static function init() {
-		$mod = new VerifConnections();
+		$mod = new VerifConnectionsModel();
 		return $mod;
 	}
 

@@ -26,6 +26,11 @@ class ProfilModel extends Model {
 		return $this;
 	}
 
+	public function setPlayer($values, $fields, $id) {
+		return $this->db->addRule("jou_id", $id)
+						->update($values, $fields);
+	}
+
 
 
 
