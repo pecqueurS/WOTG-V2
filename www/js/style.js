@@ -349,7 +349,14 @@ $("body > header").on("click",".error", function(){
 	}
 
 
-
+$('#avatar-file #avatar').on('change', function(){
+	var preview = new FileReader();
+	preview.readAsDataURL(this.files[0]);
+	console.log(this.files[0]);
+	preview.onload = function (e){
+		$('#blockAvatar img').attr('src', e.target.result).css({width:'200px', height:'200px'});
+	}
+});
 
 
 });

@@ -40,13 +40,13 @@
 	"inscription": {
 		"url": "/inscription",
 		"constant": "URL_INSCRIPT",
-		"controller":"WotG\\Controllers\\Profil::showInscription"
+		"controller":"WotG\\Controllers\\Membre::showInscription"
 	},
 
 	"profil": {
 		"url": "/profil",
 		"constant": "URL_PROFIL",
-		"controller":"WotG\\Controllers\\Profil::showProfil"
+		"controller":"WotG\\Controllers\\Membre::showProfil"
 	},
 
 

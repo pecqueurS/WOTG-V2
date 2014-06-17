@@ -16,6 +16,8 @@ class Mails {
 		$this->type = $type;
 		ini_set("SMTP",Conf::$server['smtp'] );
 		ini_set("smtp_port",Conf::$server['smtp_port'] );
+		ini_set("sendmail_from",Conf::$emails['webmaster'][0] );
+
 	}
 
 	public static function init($type = 'txt') {
@@ -59,7 +61,7 @@ class Mails {
 	public function sendMail($destinataire,$sujet,$message,$headers) {
 		$headersToSend = $this->constructHeaderMail($headers[0], $headers[1]);
 		$messageToSend = ($this->type == 'html' && is_array($message)) ? $this->constructHTMLMessage($message[0], $message[1]) : $message ; 
-
+		//phpinfo();
 		if (mail($destinataire,$sujet,$messageToSend,$headersToSend)) {
 			return true;
 		} else {

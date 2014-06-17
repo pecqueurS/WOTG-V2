@@ -48,6 +48,14 @@ class Home {
 		return $response;
 	}
 
+	public function showGetNewPwd() {
+		$response = array();
+
+
+		
+		return $response;
+	}
+
 }
 
 

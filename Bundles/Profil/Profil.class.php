@@ -2,6 +2,8 @@
 
 namespace WotG\Bundles\Profil;
 
+use Bundles\Parametres\Conf;
+
 use WotG\Models\ProfilModel;
 use WotG\Models\VerifConnectionsModel;
 use WotG\Models\ConnectesModel;
@@ -198,13 +200,19 @@ class Profil {
 			/*MODIFICATION MDP*/
 			$result2 = $profil->setPlayer([$newPwd['encodePwd']], ['jou_mdp'], $result[0]['jou_id']);
 
-			/*ENVOI D'EMAIL*/
-			$destinataire = 'stephane.pecqueur@gmail.com';
-			$sujet = 'Ceci est un test';
-			$message = 'Texte dans le test';
-			$headers = array('moi', 'scarf666@msn.com');
+			$response = Conf::$response;
 
-			if (Mails::init('txt')->sendMail($destinataire,$sujet,$message,$headers) === TRUE && $result2){
+			$response['login'] = $post["login"];
+			$response['pwd'] = $newPwd['newPwd'];
+
+
+			/*ENVOI D'EMAIL*/
+			$destinataire = $result[0]["jou_email"];
+			$sujet = 'Modification du mot de passe sur "'.Conf::$server['name'].'"';
+			$message = array($response, 'forgotPwd');
+			$headers = array(Conf::$server['name'], Conf::$emails['webmaster'][0]);
+
+			if (Mails::init('html')->sendMail($destinataire,$sujet,$message,$headers) === TRUE && $result2){
 				return TRUE;
 			}else {
 				return FALSE;

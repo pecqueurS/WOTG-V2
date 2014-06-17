@@ -43,6 +43,10 @@ section > header p {
 	text-align: right;
 }
 
+#blockAvatar label {
+	text-align: left;
+}
+
 #ongletAvatar > div:not(.blockLink), #ongletAvatar .file {
 	text-align: center;
 }

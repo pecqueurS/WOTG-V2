@@ -2,6 +2,7 @@
     "appName": "WotG",
     "serveurs" : {
         "windows": {
+            "name": "Warriors of the Galaxy",
             "protocole": "http",
             "host": "win.wotg.dev",
             "bdd_Database": "galaxy_warriors",
@@ -13,6 +14,7 @@
         },
 
         "linux": {
+            "name": "Warriors of the Galaxy",
             "protocole": "http",
             "host": "debian.wotg.dev",
             "bdd_Database": "galaxy_warriors",
@@ -24,6 +26,7 @@
         },
 
         "distant": {
+            "name": "Warriors of the Galaxy",
             "protocole": "http",
             "host": "xxx",
             "bdd_Database": "xxx",
@@ -40,6 +43,9 @@
             "stephane.pecqueur@gmail.com"
         ],
         "admin": [
+            "stephane.pecqueur@gmail.com"
+        ], 
+        "webmaster": [
             "stephane.pecqueur@gmail.com"
         ]
     },

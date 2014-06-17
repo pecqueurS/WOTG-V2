@@ -14,7 +14,6 @@ class MailsTpl extends Tpl {
 	
 	public static function display($vars = array(), $tpl = null) {
 		$tplObj = new Tpl('/App/'.Conf::$appName.'/Services/Mails/Tpl/Matrices');
-		//$this->dirTwigTpl = '/Bundles/Formulaires/Tpl';
 		return $tplObj->addVars($vars)->getTpl($tpl);
 	}
 

@@ -1,0 +1,91 @@
+{% extends "main.twig" %}
+
+{% block stylesheetBase %}
+	{{ parent() }}
+   	<link rel="stylesheet" type="text/css" href="css/styleProfil.css">
+   	<link rel="stylesheet" type="text/css" href="css/profil/inscription.css">
+{% endblock %}
+
+{% block stylesheetResize %}
+	{{ parent() }}
+   	<link rel="stylesheet" type="text/css" href="css/resize/inscription.css">
+{% endblock %}
+
+
+{% block contenu %} 
+<section>
+<header>
+	<a class="link home" href="{{ url.accueil }}" >{{ LINKS.accueil }}</a>
+</header>
+
+<article id="InscriptForm" class="cadre">
+	<header>
+		<h2>{{ dico('sign_up') }} :</h2>
+	</header>
+	<form method="POST" action="{{ url.href }}" enctype="multipart/form-data">
+<div>
+		<div id="blockServer">
+			{{ form('Inscription', 'server') }}
+		</div>
+
+		<div id="blockLogin">
+			<h3 class="link profil">{{ dico('login') }}</h3>
+			{{ form('Inscription', 'login') }}
+		</div>
+
+
+		<div id="blockMdp">
+			<h3 class="link mdp">{{ dico('pwd') }}</h3>
+			{{ form('Inscription', 'pwd') }}<br/>
+			{{ form('Inscription', 'confirm') }}
+			<div id="titreSecu">{{ dico('secu_lvl') }} : </div>
+			<div id="nivSecu"></div>
+			<div id="levSecu">HIGH</div>
+		</div>
+
+
+		<div id="blockEmail">
+			<h3 class="link email">Email</h3>
+			{{ form('Inscription', 'email') }}
+		</div>
+
+
+		<div id="blockAvatar">
+			<h3 class="link profil">Avatar</h3>
+			<div><img src="images/avatarDefault.png" alt="avatar"></div>
+			{{ form('Inscription', 'avatar') }} 
+			<p>* {{ dico('output_size') }} : 200 x 200 px</p>
+		</div>
+
+
+
+
+
+
+
+
+
+</div>
+
+
+		<div id="blockBtn">
+			<input type="submit" class="flashBtn blue" name="createLog" value="{{ dico('create') }}" >
+		</div>
+	</form>
+
+</article>
+
+
+
+
+
+
+
+
+
+</section>
+
+{{dump()}}
+
+
+{% endblock %}
