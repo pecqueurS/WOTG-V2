@@ -77,7 +77,13 @@ aside .blockBtn {
 	margin-top:20px;
 }
 
-
+#blockAvatar img {
+	border:1px solid rgb(0, 153, 255);
+	padding:15px;
+	width:170px;
+	height:170px;
+	border-radius:7px;
+}
 
 
 

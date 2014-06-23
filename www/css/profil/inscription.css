@@ -37,27 +37,61 @@
 	width:30%;
 }
 
-#titreSecu {
-	margin-top:50px;
+/*#titreSecu {
+	margin-top:10px;
+}*/
+
+#levSecu {
+	margin-bottom:50px;
 }
 
 #nivSecu {
-	width:50%;
-	height:24px;
-	background-color: #cccccc;
-	background-image: linear-gradient(to right, #ff0000 0%, #ffff00 40%, #00ff00 80%, #cccccc 81%);
-	background-image: -webkit-linear-gradient(left, #ff0000 0%, #ffff00 40%, #00ff00 80%, #cccccc 81%);
-    background-image:    -moz-linear-gradient(left, #ff0000 0%, #ffff00 40%, #00ff00 80%, #cccccc 81%);
-    background-image:     -ms-linear-gradient(left, #ff0000 0%, #ffff00 40%, #00ff00 80%, #cccccc 81%);
-    background-image:      -o-linear-gradient(left, #ff0000 0%, #ffff00 40%, #00ff00 80%, #cccccc 81%);
-			border-radius: 10px;
-	-webkit-border-radius: 10px;
-	   -moz-border-radius: 10px;
-	    -ms-border-radius: 10px;
-	     -o-border-radius: 10px;
-	border:1px solid #333333;
+	text-align: center;
 	margin:3px auto;
 }
+
+#nivSecu div {
+	display:inline-block;
+	background-color: #cccccc;
+			border-radius: 3px;
+	-webkit-border-radius: 3px;
+	   -moz-border-radius: 3px;
+	    -ms-border-radius: 3px;
+	     -o-border-radius: 3px;
+	border:1px solid #333333;
+	width:60px;
+	height:16px;
+	margin:0 2px;
+}
+
+#nivSecu .redLvl {
+	background-image: #FF0000;
+	background: 		linear-gradient(to bottom, #FF0000, #660000);
+	background: -webkit-linear-gradient(top, #FF0000 0%, #660000 100%);
+    background:    -moz-linear-gradient(top, #FF0000 0%, #660000 100%);
+    background:     -ms-linear-gradient(top, #FF0000 0%, #660000 100%);
+    background:      -o-linear-gradient(top, #FF0000 0%, #660000 100%);	
+}
+
+#nivSecu .yellowLvl {
+	background-image: #FFFF00;
+	background: 		linear-gradient(to bottom, #FFFF00, #666600);
+	background: -webkit-linear-gradient(top, #FFFF00 0%, #666600 100%);
+    background:    -moz-linear-gradient(top, #FFFF00 0%, #666600 100%);
+    background:     -ms-linear-gradient(top, #FFFF00 0%, #666600 100%);
+    background:      -o-linear-gradient(top, #FFFF00 0%, #666600 100%);	
+}
+
+#nivSecu .greenLvl {
+	background-image: #00FF00;
+	background: 		linear-gradient(to bottom, #00FF00, #006600);
+	background: -webkit-linear-gradient(top, #00FF00 0%, #006600 100%);
+    background:    -moz-linear-gradient(top, #00FF00 0%, #006600 100%);
+    background:     -ms-linear-gradient(top, #00FF00 0%, #006600 100%);
+    background:      -o-linear-gradient(top, #00FF00 0%, #006600 100%);	
+}
+
+
 
 #titreSecu,
 #levSecu {
