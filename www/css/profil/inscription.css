@@ -59,7 +59,7 @@
 	    -ms-border-radius: 3px;
 	     -o-border-radius: 3px;
 	border:1px solid #333333;
-	width:60px;
+	width:32px;
 	height:16px;
 	margin:0 2px;
 }
@@ -97,6 +97,36 @@
 #levSecu {
 	text-align: center;
 }
+
+#generate {
+	float:right;
+	margin-left:15px;
+	margin-right:10px;
+}
+
+#generate .flashBtn{
+	width:auto;
+	height: 30px;
+	padding:0 10px 7px;
+	cursor:pointer;
+}
+
+#generate .showPwd {
+	position:relative;
+	margin-top:3px;
+}
+
+#generate label {
+	width:calc(100% - 20px);
+	padding-left:20px;
+}
+
+#generate input {
+	position: absolute;
+	top:5px;
+	left:2px;
+}
+
 
 
 #blockLogin,

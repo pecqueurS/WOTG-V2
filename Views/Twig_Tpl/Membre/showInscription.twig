@@ -11,6 +11,10 @@
    	<link rel="stylesheet" type="text/css" href="css/resize/inscription.css">
 {% endblock %}
 
+{% block javascript %}
+	{{ parent() }}
+   	<script type="text/javascript" src="js/securePwd.js"></script>
+{% endblock %}
 
 {% block contenu %} 
 <section>
@@ -38,6 +42,14 @@
 			<h3 class="link mdp">{{ dico('pwd') }}</h3>
 			{{ form('Inscription', 'pwd') }}<br/>
 			{{ form('Inscription', 'confirm') }}
+			<div id="generate">
+				<div class="flashBtn blue">Générer</div>
+				<div class="showPwd">
+					<input type="checkbox" id="showPwd">
+					<label for="showPwd">Voir le mot de passe</label>
+				</div>
+			</div>
+
 			<div id="titreSecu">{{ dico('secu_lvl') }} : </div>
 			<div id="nivSecu">
 				<div class="redLvl"></div>
@@ -63,14 +75,6 @@
 			<p>* {{ dico('output_size') }} : 200 x 200 px</p>
 		</div>
 
-
-
-
-
-
-
-
-
 </div>
 
 
@@ -80,14 +84,6 @@
 	</form>
 
 </article>
-
-
-
-
-
-
-
-
 
 </section>
 
