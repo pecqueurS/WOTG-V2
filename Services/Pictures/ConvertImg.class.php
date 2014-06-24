@@ -1,6 +1,6 @@
 <?php
 
-namespace WotG\Services\Encryptor;
+namespace WotG\Services\Pictures;
 
 
 /**
@@ -8,10 +8,10 @@ namespace WotG\Services\Encryptor;
 */
 class ConvertImg {
 
-	private (string) $name;
-	private (array) $size;
+	private $name = '';
+	private $size = [];
 	private $background = [255,255,255];
-	private (int) $border;
+	private $border = 0;
 
 	private $image;
 
@@ -88,7 +88,7 @@ class ConvertImg {
 		imagecopyresampled($this->image, $source, (intval($this->border/2)+$marge_supp_left), (intval($this->border/2)+$marge_supp_top), 0, 0, $largeur_destination,$hauteur_destination, $largeur_source,$hauteur_source);
 
 		// On enregistre la miniature sous le nom $name
-		return imagejpeg($this->image,$dossier_Dest.$this->name.'.jpg');
+		return (imagejpeg($this->image,$dossier_Dest.$this->name.'.jpg')) ? $this->name : false;
 
 	}
 }

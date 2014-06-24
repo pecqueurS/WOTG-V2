@@ -110,8 +110,10 @@
 			"maxsize": 80000000,
 			"accept": "image/*",
 			"constraints":{
-				"maxSize": 80000000,
-				"mimeTypes": "image/*"
+				"File": {
+					"maxSize": 80000000,
+					"mimeTypes": "image"
+				}
 			}
 		}
 	}

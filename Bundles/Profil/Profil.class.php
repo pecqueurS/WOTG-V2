@@ -9,6 +9,7 @@ use WotG\Models\VerifConnectionsModel;
 use WotG\Models\ConnectesModel;
 
 use WotG\Services\Encryptor\Encryptor;
+use WotG\Services\Pictures\ConvertImg;
 use WotG\Services\Timer\Timer;
 use WotG\Services\Mails\Mails;
 
@@ -24,119 +25,70 @@ class Profil {
 
 
 
-	// $post = login, mdp, email
+	// $post = $_POST
 	public function inscription ($post) {
 		$this->post = $post;
+		// Verification de la parité des mots de passe
+		if($post['pwd'] != $post['confirm']) return false;
 
 		$login = $this->post["login"];
-		$mdp = $this->code ($this->algo ($this->post["mdp"]));
+		$mdp = Encryptor::code (Encryptor::crypt($this->post["pwd"]));
 		$email = $this->post["email"];
 		$lang = ($_SESSION["lang"] == "fr") ? 1 : 2 ;
 
 		$code_activation = md5(microtime(TRUE)*100000);
 
+		
 
+		// Initialisation du profil
+		$profil = ProfilModel::init();
 
-
-
-
-
-
-
-
-		// FICHIERS
-		$fichier_final = "";
-		if ($_FILES["avatar"]["name"] != "") {
-			// Traiter le fichier envoyé
-			
-			$erreur = "";
-			$taille_maxi = 8000000;
-			$taille = filesize($_FILES['avatar']['tmp_name']);
-			/** Poids <8Mo **/
-			if($taille>$taille_maxi) {
-				$erreur .= 'Le fichier est trop gros'.ini_get('post_max_size').' Maximum.<br>';
-				$_SESSION['message'] = $erreur;
+		// Joueur existe-t-il
+		if($profil->infosPlayer($post["login"])->getValues()) {
+			if(isset($_SESSION["message"])) $_SESSION["message"] .= "Ce login est déja utilisé.";
+			else $_SESSION["message"] = "Ce login est déja utilisé.";
+			return FALSE;
+		} else { // Le joueur n'existe pas
+			// Enregistrement de l'avatar
+			if ($_FILES["avatar"]["name"] != "") { // Si une image a été chargé
+				$fichier_final = ConvertImg::init($_POST['login'], array(200,200))->convertJPG('avatar',AVATARS);
+			} else { // Si aucunes images detectées
 				$fichier_final = "avatarDefault.png";
-			}
-
-			/** Type = Image **/
-			if (strpos (  $_FILES['avatar']['type'] ,  'image' )!= FALSE){
-				$erreur .= 'Le type de fichier n\'est pas pris en compte ou le fichier est corrompu.<br>';
-				$_SESSION['message'] = $erreur;
-				$fichier_final = "avatarDefault.png";
-			}
-			 
-			// Envoi les erreurs ou alors converti l'image envoyé par l'utilisateur
-			if ($erreur !== "") {
-				$_SESSION['message'] = $erreur;
-				$fichier_final = "avatarDefault.png";
-			} else {
-			    $fichier_final = ConvertImg::init($_POST['login'], array(200,200))->convertJPG('avatar',AVATARS);
-			}
-			
-		} else {
-			$fichier_final = "avatarDefault.png";
-		} 
-
-
-
-
-
-
-
-
-		$bdd = new BDD();
-
-
-		$sql = "SELECT jou_login FROM `joueurs` WHERE jou_login = ? ";
-
-	    $bind = "s";
-	  	$arr = array($login);
-	  
-	  	$bdd->prepare($sql,$bind);
-	  	$result = $bdd->execute($arr);
-
-
-
-
-	  	if(empty($result)) {
-
-			/*INSERTION EN BDD DU NOUVEL INSCRIT*/
-			$sql = "INSERT INTO `joueurs` VALUES ( NULL,  ? , ? , ? , 0, NULL, 0, NULL, ? , ? , ? , NULL )";
-
-		    $bind = "sssiss";
-		  	$arr = array($login, $mdp, $email, $lang, $fichier_final, $code_activation );
-		  
-		  	$bdd->prepare($sql,$bind);
-		  	$result = $bdd->execute($arr);
-
-
-			$objet = 'Inscription au jeu "Warriors of the Galaxy"';
-			$message = 	"Pour teminer votre inscription, veuillez cliquer sur le lien suivant : \n
-						".URL_CONFIRM_INS."$log=".$login."&code=".$code_activation." \n 
-						\n
-						Votre login est : ".$login."\n
-						Votre mot de passe : ".$this->post["mdp"];
-				
-			if (/*$this->envoi_mail($message,$objet)=== TRUE && */$result){
-				return TRUE;
-			}else {
+			} 
+			// Si l'enregistrement ne s'est pas bien passé
+			if(!$fichier_final) {
+				if(isset($_SESSION["message"])) $_SESSION["message"] .= "Une erreur s'est produite lors de l'enregistrement de votre image.";
+				else $_SESSION["message"] = "Une erreur s'est produite lors de l'enregistrement de votre image.";
 				return FALSE;
+			} else { // Si tout s'est bien passé
+				if($profil->addPlayer($login, $mdp, $email, $lang, $fichier_final, $code_activation)) {
+					/*ENVOI D'EMAIL*/
+					$response = Conf::$response;
+
+					$response['login'] = $login;
+					$response['pwd'] = $post['pwd'];
+					$response['url'] = URL_CONFIRM_INS."?log=".$login."&code=".$code_activation;
+					$response['activation'] = $code_activation;
+
+					$destinataire = $email;
+					$sujet = 'Inscription au jeu sur "'.Conf::$server['name'].'"';
+					$message = array($response, 'inscription');
+					$headers = array(Conf::$server['name'], Conf::$emails['webmaster'][0]);
+
+					if (Mails::init('html')->sendMail($destinataire,$sujet,$message,$headers) === TRUE){
+						return TRUE;
+					}else {
+						if(isset($_SESSION["message"])) $_SESSION["message"] .= "Une erreur s'est produite lors de l'envoi du mail d'activation.";
+						else $_SESSION["message"] = "Une erreur s'est produite lors de l'envoi du mail d'activation.";
+						return FALSE;
+					}
+				} else {
+					if(isset($_SESSION["message"])) $_SESSION["message"] .= "Une erreur s'est produite lors de votre inscription.";
+					else $_SESSION["message"] = "Une erreur s'est produite lors de votre inscription.";
+					return FALSE;
+				}
 			}
-
-
-
-
-
-	  	} else {
-	  		$_SESSION["message"] = "Ce login est déja utilisé";
-	  		return FALSE;
-	  	}
-
-
-
-
-
+		}
 	}
 
 

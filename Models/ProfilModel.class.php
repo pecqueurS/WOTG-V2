@@ -31,6 +31,11 @@ class ProfilModel extends Model {
 						->update($values, $fields);
 	}
 
+	public function addPlayer($name, $pwd, $email, $lang, $avatar, $activate) {
+		$values = array( NULL, $name, $pwd, $email, 0, NULL, 0, NULL, $lang, $avatar, $activate, NULL );
+		return $this->db->insert($values);
+	}
+
 
 
 

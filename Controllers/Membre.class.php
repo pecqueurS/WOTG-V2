@@ -15,15 +15,13 @@ class Membre {
 
 	public function showInscription() {
 		$response = array();
-		if(!empty($_POST)) {var_dump($_POST); }
-		if(!empty($_FILES)) {var_dump($_FILES); die;}
 		$loginForm = Forms::make('Inscription');
-		if(!$loginForm->isValid()) {
+		if(!$loginForm->isValid()) { 
 			$response['formInscription'] = $loginForm->render();
 		} else {
 			$profil = new Profil();
-			if($profil->connexion($_POST)){
-				header("location:".URL_PROFIL);
+			if($profil->inscription($_POST)){
+				header("location:".URL_ENV_MAIL);
 			} else {
 				$response['formInscription'] = $loginForm->render();
 			}
