@@ -12,9 +12,10 @@
 	},
 
 	"confirmInscript": {
-		"url": "/confirmInscript",
+		"url": "/confirmInscript\\?log=([a-zA-Z0-9-_]+)&code=([a-zA-Z0-9-_]+)",
 		"constant": "URL_CONFIRM_INS",
-		"controller":"WotG\\Controllers\\Home::showConfirmInscript"
+		"controller":"WotG\\Controllers\\Home::showConfirmInscript",
+		"loadUrl": "/confirmInscript"
 	},
 
 	"envoimail": {

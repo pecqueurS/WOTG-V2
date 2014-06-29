@@ -60,9 +60,9 @@ class Home {
 		return $response;
 	}
 
-	public function showConfirmInscript() {
+	public function showConfirmInscript($log, $code) {var_dump($log, $code);
 		$response = array();
-		if(!isset($_GET["log"]) || !isset($_GET["code"])) {
+		/*if(!isset($_GET["log"]) || !isset($_GET["code"])) {
 			header("location:".URL_ACCUEIL);
 		} else {
 			$code = $_GET["code"];
@@ -70,7 +70,7 @@ class Home {
 
 			$profil = new Profil();
 			if(!$profil->active_compte($login,$code)) header("location:".URL_ACCUEIL);
-		}
+		}*/
 		
 		return $response;
 	}
