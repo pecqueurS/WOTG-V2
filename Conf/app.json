@@ -19,7 +19,7 @@
             "host": "debian.wotg.dev",
             "bdd_Database": "galaxy_warriors",
             "bdd_username": "root",
-            "bdd_password": "Oscar",
+            "bdd_password": "oscar",
             "bdd_bddServer": "localhost",
             "smtp": "smtp.orange.fr",
             "smtp_port": "25"
