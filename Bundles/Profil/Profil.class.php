@@ -98,34 +98,15 @@ class Profil {
 
 
 	public function active_compte ($login, $code) {
-		$bdd = new BDD();
+		$profil = ProfilModel::init();
+		$result = $profil->infosPlayer($login)->getValues();
+		var_dump($result);
+		if(!empty($result) && $result[0]['jou_activate'] == $code) {
+			$result2 = $profil->setPlayer([1], ['jou_activate'], $result[0]['jou_id']);
+			if($result2) return true;
+		}
 
-		$sql = "SELECT jou_login, jou_activate  FROM `joueurs` WHERE jou_login = ? ";
-
-	    $bind = "s";
-	  	$arr = array($login);
-	  
-	  	$bdd->prepare($sql,$bind);
-	  	$result = $bdd->execute($arr);
-
-	  	if(empty($result) || $result[0]["jou_activate"] != $code) return FALSE;
-	  	else {
-
-			$sql = "UPDATE joueurs SET jou_activate = TRUE WHERE jou_login = ? ";
-
-		    $bind = "s";
-		  	$arr = array($login);
-		  
-		  	$bdd->prepare($sql,$bind);
-		  	$result = $bdd->execute($arr);
-
-
-		  	if($result) return true;
-		  	else return false;
-
-
-
-	  	}
+		return false;
 	}
 
 

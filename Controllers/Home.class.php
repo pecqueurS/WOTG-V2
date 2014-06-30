@@ -60,17 +60,13 @@ class Home {
 		return $response;
 	}
 
-	public function showConfirmInscript($log, $code) {var_dump($log, $code);
+	public function showConfirmInscript($log, $code) {
 		$response = array();
-		/*if(!isset($_GET["log"]) || !isset($_GET["code"])) {
+		$profil = new Profil();
+		
+		if(!$profil->active_compte($log,$code)) {
 			header("location:".URL_ACCUEIL);
-		} else {
-			$code = $_GET["code"];
-			$login = $_GET["log"];
-
-			$profil = new Profil();
-			if(!$profil->active_compte($login,$code)) header("location:".URL_ACCUEIL);
-		}*/
+		}
 		
 		return $response;
 	}
