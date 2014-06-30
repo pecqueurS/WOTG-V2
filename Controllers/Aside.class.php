@@ -19,6 +19,13 @@ class Aside {
 		return $response;
 	}
 
+	public function showInformations() {
+		$response = array();
+		
+		
+		return $response;
+	}
+
 
 }
 

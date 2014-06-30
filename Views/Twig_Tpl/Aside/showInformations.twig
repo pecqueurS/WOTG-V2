@@ -1,0 +1,19 @@
+{% extends "main.twig" %}
+
+{% block stylesheetBase %}
+	{{ parent() }}
+   	<link rel="stylesheet" type="text/css" href="css/styleAccueil.css">
+{% endblock %}
+
+{% block contenu %} 
+<section>	
+
+{% if session.lang == 'fr' %}
+	{% include 'Aside/Informations/informationsFR.twig' %}
+{% else %}
+	{% include 'Aside/Informations/informationsEN.twig' %}
+{% endif %}
+
+</section>
+
+{% endblock %}
