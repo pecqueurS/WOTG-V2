@@ -26,6 +26,13 @@ class Aside {
 		return $response;
 	}
 
+	public function showMapSite() {
+		$response = array();
+		
+		
+		return $response;
+	}
+
 
 }
 

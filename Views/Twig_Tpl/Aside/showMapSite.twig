@@ -1,0 +1,62 @@
+{% extends "main.twig" %}
+
+{% block stylesheetBase %}
+	{{ parent() }}
+   	<link rel="stylesheet" type="text/css" href="css/styleAccueil.css">
+{% endblock %}
+
+{% block contenu %} 
+<section>	
+
+	<header>
+		<a class="link home" href="{{ url.webroot }}" >{{ LINKS.accueil }}</a>
+	</header>
+
+
+	<article id="plan" class="cadre">
+		<header>
+			<h2>{{ LINKS.plan }} :</h2>
+		</header>
+		<div>
+			<ul>
+				<li>
+					<h3><span class="min currentGames"></span><span>{{ dico('tout_public') }}</span></h3>
+					<ul>
+						<li><h4><a href="{{ url.webroot }}"><span class="minB home"></span><span>{{ LINKS.accueil }}</span></a></h4></li>
+						<li><h4><a href="{{ url.inscription }}"><span class="minB param"></span><span>{{ LINKS.inscription }}</span></a></h4></li>
+						<li><h4><a href="{{ url.forgot_pwd }}"><span class="minB mdp"></span><span>{{ LINKS.forgot_pwd }}</span></a></h4></li>
+					</ul>
+				</li>
+				<li>
+					<h3><span class="min profil"></span><span>{{ dico('members') }}</span></h3>
+					{% if session.lang == 'fr' %}
+						<p>Pour accèder à ces pages, merci de vous connecter au préalable</p>
+					{% else %}
+						<p>To access these pages, thank you to log first</p>
+					{% endif %}
+					<ul>
+						<li><h4><a href="{{ url.profil }}"><span class="minB profil"></span><span>{{ LINKS.profil }}</span></a></h4></li>
+						<li><h4><a href="{{ url.createGame }}"><span class="minB valid"></span><span>{{ LINKS.createGame }}</span></a></h4></li>
+						<li><h4><a href="{{ url.joinGame }}"><span class="minB update"></span><span>{{ LINKS.joinGame }}</span></a></h4></li>
+					</ul>
+				</li>
+				<li>
+					<h3><span class="min history"></span><span>{{ dico('other_pages') }}</span></h3>
+					<ul>
+						<li><h4><a href="{{ url.about }}"><span class="minB alliances"></span><span>{{ LINKS.about }}</span></a></h4></li>
+						<li><h4><a href="{{ url.plan }}"><span class="minB map"></span><span>{{ LINKS.plan }}</span></a></h4></li>
+						<li><h4><a href="{{ url.informations }}"><span class="minB param"></span><span>{{ LINKS.informations }}</span></a></h4></li>
+						<li><h4><a href="{{ url.abus }}"><span class="minB sendMail"></span><span>{{ LINKS.abus }}</span></a></h4></li>
+						<li><h4><a href="{{ url.bug }}"><span class="minB reports"></span><span>{{ LINKS.bug }}</span></a></h4></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+	</article>
+
+
+
+</section>
+
+{% endblock %}
