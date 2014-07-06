@@ -1,0 +1,119 @@
+.arrow-up {
+	width: 0; 
+	height: 0; 
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	
+	border-bottom: 10px solid #dddddd;
+	cursor:pointer;
+}
+
+.arrow-down {
+	width: 0; 
+	height: 0; 
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	
+	border-top: 10px solid #dddddd;
+	cursor:pointer;
+}
+
+.arrow-right {
+	width: 0; 
+	height: 0; 
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+	
+	border-left: 10px solid #dddddd;
+	cursor:pointer;
+}
+
+.arrow-left {
+	width: 0; 
+	height: 0; 
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent; 
+	
+	border-right:10px solid #dddddd; 
+	cursor:pointer;
+}
+
+.arrow-up:hover {
+	border-bottom: 10px solid rgb(0, 155, 255);
+}
+
+.arrow-down:hover {
+	border-top: 10px solid rgb(0, 155, 255);
+}
+
+.arrow-right:hover {
+	border-left: 10px solid rgb(0, 155, 255);
+}
+
+.arrow-left:hover {
+	border-right:10px solid rgb(0, 155, 255); 
+}
+
+
+
+
+.weekBlock > div {
+	position:absolute;
+	top:0;
+}
+
+.weekBlock .arrow-left {
+	left:10%;
+}
+
+.weekBlock .arrow-right {
+	right:10%;
+}
+
+.changeHour {
+	position:absolute;
+	top:0;
+	left:0;
+	width:7.5%;
+	height:100%;
+}
+
+.changeMin {
+	position:absolute;
+	top:0;
+	right:0;
+	width:7.5%;
+	height:100%;
+}
+
+.changeHour .arrow-up,
+.changeMin .arrow-up {
+	margin:58px auto 10px;
+}
+
+.changeHour .arrow-down,
+.changeMin .arrow-down {
+	margin:0 auto;
+}
+
+
+
+
+
+
+
+.horloge .icon-calendar {
+	position:absolute !important;
+	bottom:10px;
+	right:10px;
+}
+
+
+.icon-clock {
+	position:absolute !important;
+	bottom:10px;
+	left:10px;
+}
+
+
+
