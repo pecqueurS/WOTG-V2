@@ -1,0 +1,108 @@
+{% extends "main.twig" %}
+
+{% block stylesheetBase %}
+	{{ parent() }}
+   	<link rel="stylesheet" type="text/css" href="css/styleAccueil.css">
+   	<link rel="stylesheet" type="text/css" href="css/horloge.css">
+{% endblock %}
+
+{% block javascript %}
+	{{ parent() }}
+   	<script type="text/javascript" src="js/horloge.js"></script>
+   	<script type="text/javascript" src="js/abus.js"></script>
+{% endblock %}
+
+
+{% block contenu %} 
+<section>	
+	<header>
+		<a class="link home" href="{{ url.webroot }}" >{{ LINKS.accueil }}</a>
+	</header>
+
+	<article id="loginForm" class="cadre">
+		<header>
+			<h2>{{ LINKS.abus }} :</h2>
+		</header>
+	<div>
+		<form method="POST" action="?page=abus">
+			<div id="blockServer">
+				<label for="server">{{ dico('server') }} :</label><br/>
+				<select id="server" name="server">
+					<option selected>Andromede</option>
+				</select>
+			</div>
+			<div id="blockForm">
+				<fieldset id="nameForm">
+					<legend>{{ dico('player') }}</legend>
+					<label for="login" class="login">{{ dico('user_name') }} :</label>
+					<input type="text" class="input" id="login" name="login" value="" placeholder="Enter your Login" required>
+				</fieldset>
+				<fieldset>
+					<legend>{{ dico('date') }}</legend>
+					<div id="dateForm">
+						<label for="datepicker" class="login">{{ dico('quand_abus') }} :</label>
+						<input type="date" class="input" id="datepicker" name="date" value="" placeholder="click to pick a date" required><br/>
+					</div>
+					<div id="horaireForm">
+						<div>
+							<label for="heure" class="heure">{{ dico('hour') }} :</label>
+							<input class="range timeRange" type="range" id="heure" name="heure" value="0" min="0" max="23" step="1"> 
+							<input class="input range timeText" type="text" id="heure2" name="heure2" value="0" required>
+						</div>
+						<div>
+							<label for="minute" class="heure">Minute :</label>
+							<input class="range timeRange" type="range" id="minute" name="minute" value="0" min="0" max="59" step="1"> 
+							<input class="input range timeText" type="text" id="minute2" name="minute2" value="0" required>
+						</div>
+						<div id="resultHoraire">{{ dico('heure_abus') }} : <span>00</span>:<span>00</span></div>
+					</div>
+				</fieldset>
+				<fieldset id="blockMessage">
+					<legend>Description</legend>
+					<label for="message" class="{CLASS_MDP}">{{ dico('description_abus') }} :</label>
+					<textarea class="input" id="message" name="message" placeholder="Enter message" required></textarea>
+				</fieldset>
+			</div>
+			<div id="blockBtn">
+				<input type="submit" class="btn sendMail" name="sendMail" value="{{ dico('send') }}" >
+				
+			</div>
+
+
+			<div class="icon-calendar">
+				<div class="calendarCenter"></div>
+				<div class="stickLeft"></div>
+				<div class="stickRight"></div>
+				<div class="headLeft"></div>
+				<div class="headCenter"></div>
+				<div class="headRight"></div>
+			</div>
+
+			<div class="icon-clock">
+				<div class="clockBackground"></div>
+				<div class="clockHour"></div>
+				<div class="clockMin"></div>
+			</div>
+
+
+			<div id="horlogeBig"></div>
+			<div id="horlogeMedium"></div>
+			<div id="horlogeSmall"></div>
+
+
+
+
+
+
+
+
+		</form>
+	</div>
+
+	</article>
+
+
+  
+</section>
+
+{% endblock %}
