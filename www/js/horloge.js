@@ -1,10 +1,6 @@
 (function( $ ){
     $.fn.horloge = function(size, options) {
       
-        
-        console.log('testEmail');
-
-
         var width = size + 'px';
         var height = parseInt(size/2) + 'px';
 
