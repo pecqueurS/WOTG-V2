@@ -33,6 +33,13 @@ class Aside {
 		return $response;
 	}
 
+	public function showAbus() {
+		$response = array();
+		
+		
+		return $response;
+	}
+
 
 }
 
