@@ -4,6 +4,10 @@
         var width = size + 'px';
         var height = parseInt(size/2) + 'px';
 
+        var months = ['JANVIER', 'FEVRIER', 'MARS', 'AVRIL', 'MAI', 'JUIN', 'JUILLET', 'AOUT', 'SEPTEMBRE', 'OCTOBRE', 'NOVEMBRE', 'DECEMBRE'];
+        var years = [2014, 2013, 2012, 2011, 2010];
+
+
         var that = $(this);
 
          var dating = function() {
@@ -12,7 +16,7 @@
                var dateFirstSplit = options.date.split(' ');
                var dateArray = dateFirstSplit[0].split('-');
                var hourArray = dateFirstSplit[1].split(':');
-               date = new Date(dateArray[0], (dateArray[1] - 1), dateArray[2], hourArray[0], hourArray[1]);
+               date = new Date(dateArray[0], (dateArray[1]), dateArray[2], hourArray[0], hourArray[1]);
                console.log(dateFirstSplit);
             } else {
                date = new Date();
@@ -100,6 +104,11 @@
             }, function() {
                 icon($(this), 'clock', 32, '#dddddd');
             });
+
+
+
+
+
         };
 
         var addCss = function(date) {
@@ -224,7 +233,7 @@
                margin:'0 ' + parseInt(size * 3 / 400) + 'px'
             });
 
-            var weekDay = date.getDay() -1; console.log(date);
+            var weekDay = date.getDay() -1; 
             that.find('.week li').eq(weekDay).css({color:'#333333'});   
 
             that.find('.horloge .date .block .dateBlock').css( {
@@ -343,6 +352,21 @@
                var newDay = date.getDate() + difference;
                date.setDate(newDay);
                refresh(date);
+
+            });
+
+            $('.icon-calendar').click(function(){
+                that.append(datePicker(date));
+                changeInputSelectDatePicker();
+
+                that.on('click', 'tbody td:not(.disabled)', function(){
+                  that.find('td').removeClass('selected');
+                  $(this).addClass('selected');
+                  that.find('.dateBlock .jour span').text($(this).text());
+                  var eq = $(this).index();console.log(eq);
+                  that.find('.horloge .date .block .weekBlock ul li').css({color:'#cccccc'});
+                  that.find('.week li').eq(eq).css({color:'#333333'});
+                });
 
             });
         }
@@ -487,8 +511,127 @@
                 borderRadius: (1 / 20 * size) + 'px',
                 background: color
             });
-
         }
+
+
+        var changeDayInDatePicker = function(date){
+          var startDay = new Date(date.getFullYear(), date.getMonth(), '01');
+          var NbOfFirstDay = (startDay.getDay() == 0) ? startDay.getDay() + 6 : startDay.getDay() - 1;
+          var firstDayOfCalendar = new Date(startDay.getTime() - (1000 * 60 * 60 * 24 * NbOfFirstDay));
+                    
+          var html2 = '';
+          var calendarDate = firstDayOfCalendar;
+                    for (var i = 0; i < 6; i++) {
+                      html2 += '<tr>';
+                      for (var j = 0; j < 7; j++) {
+                        if (i != 0 || j!= 0) {
+                          //add a day to the date
+                          calendarDate = new Date(calendarDate.getTime() + (1000 * 60 * 60 * 24));
+                        };
+                        if(calendarDate.getDate() == 1){
+                          console.log(calendarDate.getMonth(), date.getMonth());
+                          console.log(date.getMonth() != calendarDate.getMonth() ? 'disabled' : '');
+                        }
+                        html2 += '<td class="' + (date.getMonth() != calendarDate.getMonth() ? 'disabled' : '')  + (date.getDate() == calendarDate.getDate() && date.getMonth() == calendarDate.getMonth() ? 'selected' : '') + '">' + calendarDate.getDate() + '</td>';
+                        
+                      };
+                      html2 += '</tr>';
+                    };
+          return html2;
+        }
+
+
+        var datePicker = function(date) {
+          var monthText = months[date.getMonth()];
+
+          var html = '<div class="datePicker">';
+                html += '<div class="headerDatePicker">';
+                  html += '<div>';
+                    html += '<div class="arrow-left"></div>';
+                    html += '<div class="select selectMonth">' + monthText + '</div>';
+                    html += '<div class="arrow-right"></div>';
+                  html += '</div>';
+                  html += '<div>';
+                    html += '<div class="arrow-left"></div>';
+                    html += '<div class="select selectYear">' + date.getFullYear() + '</div>';
+                    html += '<div class="arrow-right"></div>';
+                  html += '</div>';
+                html += '</div>';
+                html += '<div class="calendarDatePicker">';
+                  html += '<table>';
+                    html += '<thead>';
+                      html += '<tr>';
+                        html += '<th>LUN</th><th>MAR</th><th>MER</th><th>JEU</th><th>VEN</th><th>SAM</th><th>DIM</th>';
+                      html += '</tr>';
+                    html += '</thead>';
+                    html += '<tbody>';
+                    html += changeDayInDatePicker(date);
+                    html += '</tbody>';
+                  html += '</table>';
+                html += '</div>';
+              html += '</div>';
+          return html;
+        }
+
+
+        var fakeInputSelect = function(element, values) {
+          var html = '<div class="cache"></div>';
+              html += '<ul>';
+          for (var i = 0; i < values.length; i++) {
+              html += '<li>' + values[i] + '</li>';
+          };
+              html += '</ul>';
+              html += '<div class="selected">' + element.text() + '</div>';
+              html += '<div class="front"></div>';
+          element.html(html);
+        };
+
+  
+        var changeInputSelectDatePicker = function() {console.log('test');
+          fakeInputSelect( that.find('.headerDatePicker .selectMonth'), months );
+
+          fakeInputSelect( that.find('.headerDatePicker .selectYear'), years );
+
+          that.find( ".select .selected" ).bind('click', function( eventClick ){
+            var element = $(this);
+            var parent = $(this).parents('.select');
+            parent.find("*").css({zIndex:'150'});
+            parent.find(".front, .cache, ul").show();
+            var mousePositionStart = eventClick.pageY;
+            var mousePositionEnd = eventClick.pageY + parent.find('ul').height() - parent.find('.selected').height() + 5;
+            var sizeMouseMove = mousePositionEnd - mousePositionStart;
+            var lengthList = (parent.find('ul li')).length;
+
+            parent.mousemove(function( event ) {
+              var mousePositionNow = event.pageY;
+              if (mousePositionNow > mousePositionStart && mousePositionNow < mousePositionEnd) {
+                var diff = mousePositionNow - mousePositionStart;
+                parent.find('ul').css({top: '-' + diff + 'px' });
+
+                var pos = parseInt(diff * lengthList / sizeMouseMove);
+                var selection = parent.find('ul li').eq(pos).text();
+                parent.find('.selected').html(selection);
+              }
+                parent.find(".front").click(function() {
+                  parent.unbind(event);
+                  parent.find(".front, .cache, ul").hide();
+                  parent.find("*").css({zIndex:'auto'});
+            
+              });
+
+            
+            });
+          });
+        }
+
+
+
+
+
+
+
+
+
 
         var currentDate = dating();
         construct(currentDate);
@@ -515,3 +658,66 @@
         return this;
     }; 
 })( jQuery );
+
+
+
+
+
+$(document).ready(function() {
+
+/*  var fakeInputSelect = function(element, values) {
+    var html = '<div class="cache"></div>';
+        html += '<ul>';
+    for (var i = 0; i < values.length; i++) {
+        html += '<li>' + values[i] + '</li>';
+    };
+        html += '</ul>';
+        html += '<div class="selected">' + element.text() + '</div>';
+        html += '<div class="front"></div>';
+    element.html(html);
+  };
+
+  var months = ['JANVIER', 'FEVRIER', 'MARS', 'AVRIL', 'MAI', 'JUIN', 'JUILLET', 'AOUT', 'SEPTEMBRE', 'OCTOBRE', 'NOVEMBRE', 'DECEMBRE'];
+  var years = [2014, 2013, 2012, 2011, 2010];
+
+  fakeInputSelect($('.headerDatePicker .selectMonth'), months );
+
+  fakeInputSelect($('.headerDatePicker .selectYear'), years );
+
+  $( ".select .selected" ).bind('click', function( eventClick ){
+    var element = $(this);
+    var that = $(this).parents('.select');
+    that.find("*").css({zIndex:'150'});
+    that.find(".front, .cache, ul").show();
+    var mousePositionStart = eventClick.pageY;
+    var mousePositionEnd = eventClick.pageY + that.find('ul').height() - that.find('.selected').height() + 5;
+    var sizeMouseMove = mousePositionEnd - mousePositionStart;
+    var lengthList = (that.find('ul li')).length;
+
+    that.mousemove(function( event ) {
+      var mousePositionNow = event.pageY;
+      console.log(mousePositionNow);
+      if (mousePositionNow > mousePositionStart && mousePositionNow < mousePositionEnd) {
+        var diff = mousePositionNow - mousePositionStart;
+        that.find('ul').css({top: '-' + diff + 'px' });
+
+        var pos = parseInt(diff * lengthList / sizeMouseMove);
+        var selection = that.find('ul li').eq(pos).text();
+        console.log(selection);
+        that.find('.selected').html(selection);
+      }
+        that.find(".front").click(function() {
+          that.unbind(event);
+          that.find(".front, .cache, ul").hide();
+          that.find("*").css({zIndex:'auto'});
+    
+      });
+
+    
+    });
+  });
+*/
+
+
+
+});
