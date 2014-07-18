@@ -16,7 +16,7 @@
                var dateFirstSplit = options.date.split(' ');
                var dateArray = dateFirstSplit[0].split('-');
                var hourArray = dateFirstSplit[1].split(':');
-               date = new Date(dateArray[0], (dateArray[1]), dateArray[2], hourArray[0], hourArray[1]);
+               date = new Date(dateArray[0], (dateArray[1] - 1), dateArray[2], hourArray[0], hourArray[1]);
                console.log(dateFirstSplit);
             } else {
                date = new Date();
@@ -26,7 +26,7 @@
          };
 
          var construct = function(date) {
-            mois = date.getMonth() < 10 ? '0' + date.getMonth() : date.getMonth();
+            mois = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1);
             jour = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
             heure = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
             minute = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
@@ -118,7 +118,8 @@
                width: width,
                height: height,
                background: 'linear-gradient(to bottom, #666666, #333333)', 
-               borderRadius: parseInt(size * 10 / 400) + 'px'
+               borderRadius: parseInt(size * 10 / 400) + 'px',
+               cursor: 'default'
             });
 
             that.find('.horloge .fond').css( {
@@ -356,16 +357,21 @@
             });
 
             $('.icon-calendar').click(function(){
-                that.append(datePicker(date));
+                that.find('.horloge').append(datePicker(date));
                 changeInputSelectDatePicker();
 
-                that.on('click', 'tbody td:not(.disabled)', function(){
+                that.on('click', 'tbody td:not(.disabled, .exit)', function(){
                   that.find('td').removeClass('selected');
                   $(this).addClass('selected');
                   that.find('.dateBlock .jour span').text($(this).text());
                   var eq = $(this).index();console.log(eq);
                   that.find('.horloge .date .block .weekBlock ul li').css({color:'#cccccc'});
                   that.find('.week li').eq(eq).css({color:'#333333'});
+                });
+
+                that.on('click', 'tbody td.exit', function(){
+                  that.find('.datePicker').remove();
+                  
                 });
 
             });
@@ -528,11 +534,13 @@
                           //add a day to the date
                           calendarDate = new Date(calendarDate.getTime() + (1000 * 60 * 60 * 24));
                         };
-                        if(calendarDate.getDate() == 1){
-                          console.log(calendarDate.getMonth(), date.getMonth());
-                          console.log(date.getMonth() != calendarDate.getMonth() ? 'disabled' : '');
+
+                        if (i == 5 && j == 6) {
+                          html2 += '<td class="exit" >X</td>';
+                        } else {
+                          html2 += '<td class="' + (date.getMonth() != calendarDate.getMonth() ? 'disabled' : '')  + (date.getDate() == calendarDate.getDate() && date.getMonth() == calendarDate.getMonth() ? 'selected' : '') + '">' + calendarDate.getDate() + '</td>';
                         }
-                        html2 += '<td class="' + (date.getMonth() != calendarDate.getMonth() ? 'disabled' : '')  + (date.getDate() == calendarDate.getDate() && date.getMonth() == calendarDate.getMonth() ? 'selected' : '') + '">' + calendarDate.getDate() + '</td>';
+                        
                         
                       };
                       html2 += '</tr>';
@@ -587,7 +595,7 @@
         };
 
   
-        var changeInputSelectDatePicker = function() {console.log('test');
+        var changeInputSelectDatePicker = function() {
           fakeInputSelect( that.find('.headerDatePicker .selectMonth'), months );
 
           fakeInputSelect( that.find('.headerDatePicker .selectYear'), years );
@@ -616,12 +624,127 @@
                   parent.unbind(event);
                   parent.find(".front, .cache, ul").hide();
                   parent.find("*").css({zIndex:'auto'});
+
+                  var indexMonth = $.inArray(that.find('.headerDatePicker .selectMonth .selected').text(), months);
+                  var indexYear = that.find('.headerDatePicker .selectYear .selected').text();
+                  var selectNewDate = new Date(indexYear, indexMonth);
+                  var newCalendar = changeDayInDatePicker(selectNewDate);
+                  that.find('.calendarDatePicker table tbody').html(newCalendar);
+                  
+                  selectMois = (selectNewDate.getMonth() + 1) < 10 ? '0' + (selectNewDate.getMonth() + 1) : (selectNewDate.getMonth() + 1);
+                  selectJour = selectNewDate.getDate() < 10 ? '0' + selectNewDate.getDate() : selectNewDate.getDate();
             
+
+                  that.find('.horloge .date .block .weekBlock ul li').css({color:'#cccccc'});
+                  that.find('.week li').eq(selectNewDate.getDay() -1).css({color:'#333333'});
+                  that.find('.jour span').text(selectJour);
+                  that.find('.mois span').text(selectMois);
+                  that.find('.annee span').text(selectNewDate.getFullYear());
+
               });
 
             
             });
           });
+          
+          that.find('.datePicker .headerDatePicker > div:first-child .arrow-left').click(function() {
+            var thisMonth = $.inArray(that.find('.headerDatePicker .selectMonth .selected').text(), months);
+            var thisYear = that.find('.headerDatePicker .selectYear .selected').text();
+
+            if (thisMonth == 0) {
+              thisMonth = 11;
+              thisYear --;
+            } else {
+              thisMonth --;
+            }
+
+            var newDate = new Date(thisYear, thisMonth, '01');
+            that.find('.headerDatePicker .selectMonth .selected').html(months[newDate.getMonth()]);
+            that.find('.headerDatePicker .selectYear .selected').html(newDate.getFullYear());
+            var newCalendar = changeDayInDatePicker(newDate);
+            that.find('.calendarDatePicker table tbody').html(newCalendar);
+
+            selectMois = (newDate.getMonth() + 1) < 10 ? '0' + (newDate.getMonth() + 1) : (newDate.getMonth() + 1);
+            selectJour = newDate.getDate() < 10 ? '0' + newDate.getDate() : newDate.getDate();
+
+            that.find('.horloge .date .block .weekBlock ul li').css({color:'#cccccc'});
+            that.find('.week li').eq(newDate.getDay() -1).css({color:'#333333'});
+            that.find('.jour span').text(selectJour);
+            that.find('.mois span').text(selectMois);
+            that.find('.annee span').text(newDate.getFullYear());
+          });
+
+          that.find('.datePicker .headerDatePicker > div:first-child .arrow-right').click(function() {
+            var thisMonth = $.inArray(that.find('.headerDatePicker .selectMonth .selected').text(), months);
+            var thisYear = that.find('.headerDatePicker .selectYear .selected').text();
+
+            if (thisMonth == 11) {
+              thisMonth = 0;
+              thisYear ++;
+            } else {
+              thisMonth ++;
+            }
+
+            var newDate = new Date(thisYear, thisMonth, '01');
+            that.find('.headerDatePicker .selectMonth .selected').html(months[newDate.getMonth()]);
+            that.find('.headerDatePicker .selectYear .selected').html(newDate.getFullYear());
+            var newCalendar = changeDayInDatePicker(newDate);
+            that.find('.calendarDatePicker table tbody').html(newCalendar);
+
+            selectMois = (newDate.getMonth() + 1) < 10 ? '0' + (newDate.getMonth() + 1) : (newDate.getMonth() + 1);
+            selectJour = newDate.getDate() < 10 ? '0' + newDate.getDate() : newDate.getDate();
+
+            that.find('.horloge .date .block .weekBlock ul li').css({color:'#cccccc'});
+            that.find('.week li').eq(newDate.getDay() -1).css({color:'#333333'});
+            that.find('.jour span').text(selectJour);
+            that.find('.mois span').text(selectMois);
+            that.find('.annee span').text(newDate.getFullYear());
+          });
+
+          that.find('.datePicker .headerDatePicker > div:last-child .arrow-left').click(function() {
+            var thisMonth = $.inArray(that.find('.headerDatePicker .selectMonth .selected').text(), months);
+            var thisYear = that.find('.headerDatePicker .selectYear .selected').text();
+
+            thisYear --;
+
+            var newDate = new Date(thisYear, thisMonth, '01');
+            that.find('.headerDatePicker .selectMonth .selected').html(months[newDate.getMonth()]);
+            that.find('.headerDatePicker .selectYear .selected').html(newDate.getFullYear());
+            var newCalendar = changeDayInDatePicker(newDate);
+            that.find('.calendarDatePicker table tbody').html(newCalendar);
+
+            selectMois = (newDate.getMonth() + 1) < 10 ? '0' + (newDate.getMonth() + 1) : (newDate.getMonth() + 1);
+            selectJour = newDate.getDate() < 10 ? '0' + newDate.getDate() : newDate.getDate();
+
+            that.find('.horloge .date .block .weekBlock ul li').css({color:'#cccccc'});
+            that.find('.week li').eq(newDate.getDay() -1).css({color:'#333333'});
+            that.find('.jour span').text(selectJour);
+            that.find('.mois span').text(selectMois);
+            that.find('.annee span').text(newDate.getFullYear());
+          });
+
+          that.find('.datePicker .headerDatePicker > div:last-child .arrow-right').click(function() {
+            var thisMonth = $.inArray(that.find('.headerDatePicker .selectMonth .selected').text(), months);
+            var thisYear = that.find('.headerDatePicker .selectYear .selected').text();
+
+            thisYear ++;
+
+            var newDate = new Date(thisYear, thisMonth, '01');
+            that.find('.headerDatePicker .selectMonth .selected').html(months[newDate.getMonth()]);
+            that.find('.headerDatePicker .selectYear .selected').html(newDate.getFullYear());
+            var newCalendar = changeDayInDatePicker(newDate);
+            that.find('.calendarDatePicker table tbody').html(newCalendar);
+
+            selectMois = (newDate.getMonth() + 1) < 10 ? '0' + (newDate.getMonth() + 1) : (newDate.getMonth() + 1);
+            selectJour = newDate.getDate() < 10 ? '0' + newDate.getDate() : newDate.getDate();
+
+            that.find('.horloge .date .block .weekBlock ul li').css({color:'#cccccc'});
+            that.find('.week li').eq(newDate.getDay() -1).css({color:'#333333'});
+            that.find('.jour span').text(selectJour);
+            that.find('.mois span').text(selectMois);
+            that.find('.annee span').text(newDate.getFullYear());
+          });
+
         }
 
 

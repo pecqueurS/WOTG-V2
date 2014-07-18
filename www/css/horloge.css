@@ -122,7 +122,9 @@
 
 
 .datePicker {
-	position:relative;
+	position:absolute;
+	top:-70px;
+	left:57px;
 	width:280px;
 	border:1px solid gray;
 	border-radius:3px;
@@ -208,6 +210,13 @@
 	color:#cccccc;
 }
 
+.datePicker .calendarDatePicker td.exit {
+	color:red;
+}
+
+.datePicker .calendarDatePicker td.exit:hover {
+	background:red;
+}
 
 
 

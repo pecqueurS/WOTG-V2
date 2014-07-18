@@ -6,7 +6,7 @@ var options = {
 
 var options2 = {
 	active: false,
-	date: '2014-05-01 00:24',
+	date: '2014-05-01 00:00',
 	setter: true
 }
 
