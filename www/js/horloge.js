@@ -350,9 +350,11 @@
                }
             ).on('click', function() {
                var difference = ($(this).index()) - weekDay;
-               var newDay = date.getDate() + difference;
-               date.setDate(newDay);
-               refresh(date);
+               var startDay = new Date(that.find('.annee').text(), that.find('.mois').text() - 1, that.find('.jour').text());
+              
+               var newDay = startDay.getDate() + difference;
+               startDay.setDate(newDay);
+               refresh(startDay);
 
             });
 
@@ -369,12 +371,30 @@
                   that.find('.week li').eq(eq).css({color:'#333333'});
                 });
 
-                that.on('click', 'tbody td.exit', function(){
+                that.on('click', 'tbody td.exit, .datePicker > .cache', function(){
                   that.find('.datePicker').remove();
                   
                 });
 
             });
+
+            that.find('.weekBlock .arrow-left').click(function() {
+              var startDay = new Date(that.find('.annee').text(), that.find('.mois').text() - 1, that.find('.jour').text());
+              var sub1Week = new Date(startDay.getTime() - (1000 * 60 * 60 * 24 * 7));
+              that.find('.annee span').text(sub1Week.getFullYear());
+              that.find('.mois span').text((sub1Week.getMonth() + 1) <10 ? '0' + (sub1Week.getMonth() + 1) : (sub1Week.getMonth() + 1));
+              that.find('.jour span').text(sub1Week.getDate() <10 ? '0' + sub1Week.getDate() : sub1Week.getDate());
+            });
+
+            that.find('.weekBlock .arrow-right').click(function() {
+              var startDay = new Date(that.find('.annee').text(), that.find('.mois').text() - 1, that.find('.jour').text());
+              var add1Week = new Date(startDay.getTime() + (1000 * 60 * 60 * 24 * 7));
+              that.find('.annee span').text(add1Week.getFullYear());
+              that.find('.mois span').text((add1Week.getMonth() + 1) <10 ? '0' + (add1Week.getMonth() + 1) : (add1Week.getMonth() + 1));
+              that.find('.jour span').text(add1Week.getDate() <10 ? '0' + add1Week.getDate() : add1Week.getDate());
+            });
+
+
         }
 
         var icon = function(element, type, size, color) {
@@ -553,6 +573,7 @@
           var monthText = months[date.getMonth()];
 
           var html = '<div class="datePicker">';
+                html += '<div class="cache"></div>';
                 html += '<div class="headerDatePicker">';
                   html += '<div>';
                     html += '<div class="arrow-left"></div>';
