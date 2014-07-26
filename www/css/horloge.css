@@ -119,7 +119,7 @@
 }
 
 
-.icon-clock {
+.horloge .icon-clock {
 	position:absolute !important;
 	bottom:10px;
 	left:10px;
@@ -246,6 +246,44 @@
 .datePicker > .cache {
 	display:block;
 }
+
+
+
+
+
+
+.timer .setTimer {
+	position:absolute;
+	top:0;
+	left:12px;
+	width:373px;
+	height:100px;
+	cursor:default;
+	border-radius:5px;
+	background: white;
+	text-align: center;
+}
+
+
+
+.timer .setTimer > div {
+	display:inline-block;
+	width:120px;
+	margin: 30px 7px 30px 20px;
+}
+
+.timer .setTimer > span {
+	display:inline-block;
+}
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,12 +1,41 @@
 (function( $ ){
     $.fn.horloge = function(size, options) {
       
+        var getArray = function (begin, end, step, not) {
+          if (!step) step = 1;
+          var array = [];
+          if (begin <= end) {
+            for (var i = begin; i <= end; i += step) {
+              if (($.inArray(i, not))) {
+                array.push(i);
+              }
+            };
+          } else {
+            for (var i = begin; i >= end; i -= step) {
+              if (($.inArray(i, not))) {
+                array.push(i);
+              }
+            };
+          }
+
+          return array;
+        };
+
         var width = size + 'px';
         var height = parseInt(size/2) + 'px';
 
         var months = ['JANVIER', 'FEVRIER', 'MARS', 'AVRIL', 'MAI', 'JUIN', 'JUILLET', 'AOUT', 'SEPTEMBRE', 'OCTOBRE', 'NOVEMBRE', 'DECEMBRE'];
-        var years = [2014, 2013, 2012, 2011, 2010];
-
+        var years = getArray(2014, 2010, 1);
+        var hours = getArray(0, 23);
+        var minutes = getArray(0, 59, 5);
+        for (var i = 0; i < hours.length; i++) {
+          hours[i] = hours[i] < 10 ? '0' + hours[i] : hours[i];
+        };
+        
+        for (var i = 0; i < minutes.length; i++) {
+          minutes[i] = minutes[i] < 10 ? '0' + minutes[i] : minutes[i];
+        };
+        
 
         var that = $(this);
 
@@ -393,6 +422,67 @@
               that.find('.mois span').text((add1Week.getMonth() + 1) <10 ? '0' + (add1Week.getMonth() + 1) : (add1Week.getMonth() + 1));
               that.find('.jour span').text(add1Week.getDate() <10 ? '0' + add1Week.getDate() : add1Week.getDate());
             });
+
+            $('.icon-clock').click(function(){
+              console.log('test');
+              var selectTime = '<div class="timer">';
+                    selectTime += '<div class="cache"></div>';
+                    selectTime += '<div class="setTimer">';
+                      selectTime += '<div><div class="select selectHour">00</div></div><span>H </span>';
+                      selectTime += '<div><div class="select selectMinutes">00</div></div><span>min</span>';
+                    selectTime += '</div>';
+                  selectTime += '</div>';
+             
+              that.find('.horloge').append(selectTime);
+              that.find('.horloge .timer > .cache').show();
+              fakeInputSelect( that.find('.selectHour'), hours );
+              fakeInputSelect( that.find('.selectMinutes'), minutes );
+
+            that.find( ".select .selected" ).bind('click', function( eventClick ){
+              var parent = $(this).parents('.select');
+              parent.find("*").css({zIndex:'150'});
+              parent.find(".front, .cache, ul").show();
+              var mousePositionStart = eventClick.pageY;
+              var mousePositionEnd = eventClick.pageY + parent.find('ul').height() - parent.find('.selected').height() + 5;
+              var sizeMouseMove = mousePositionEnd - mousePositionStart;
+              var lengthList = (parent.find('ul li')).length;
+
+              parent.mousemove(function( event ) {
+                var mousePositionNow = event.pageY;
+                if (mousePositionNow > mousePositionStart && mousePositionNow < mousePositionEnd) {
+                  var diff = mousePositionNow - mousePositionStart;
+                  parent.find('ul').css({top: '-' + diff + 'px' });
+
+                  var pos = parseInt(diff * lengthList / sizeMouseMove);
+                  var selection = parent.find('ul li').eq(pos).text();
+                  parent.find('.selected').html(selection);
+                }
+                  parent.find(".front").click(function() {
+                    parent.unbind(event);
+                    parent.find(".front, .cache, ul").hide();
+                    parent.find("*").css({zIndex:'auto'});
+
+                    var indexHour = that.find('.timer .selectHour .selected').text();
+                    var indexMin = that.find('.timer .selectMinutes .selected').text();
+                    console.log(that.find('.heure .right .top span span, .heure .right .bottom span span'));
+                    that.find('.heure .left .top span span, .heure .left .bottom span span').text(indexHour);
+                    that.find('.heure .right .top span, .heure .right .bottom span').text(indexMin);
+
+                });
+
+              
+              });
+            });
+            
+
+              
+              that.on('click', '.timer > .cache', function(){
+                that.find('.timer').remove();
+              });
+
+            });
+
+            
 
 
         }
