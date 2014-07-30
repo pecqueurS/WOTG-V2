@@ -423,6 +423,30 @@
               that.find('.jour span').text(add1Week.getDate() <10 ? '0' + add1Week.getDate() : add1Week.getDate());
             });
 
+            that.find('.changeHour .arrow-up').click(function() {
+              var oldHour = that.find('.heure .block .left .top span span').text();
+              var newHour = oldHour >= 23 ? '00' : (parseInt(oldHour) < 9 ? '0' + (parseInt(oldHour) + 1) : parseInt(oldHour) + 1) ;
+              that.find('.heure .block .left .top span span, .heure .block .left .bottom span').text(newHour);
+            });
+
+            that.find('.changeHour .arrow-down').click(function() {
+              var oldHour = that.find('.heure .block .left .top span span').text();
+              var newHour = parseInt(oldHour) <= 0 ? '23' : (parseInt(oldHour) < 11 ? '0' + (parseInt(oldHour) - 1) : parseInt(oldHour) - 1) ;
+              that.find('.heure .block .left .top span span, .heure .block .left .bottom span').text(newHour);
+            });
+
+            that.find('.changeMin .arrow-up').click(function() {
+              var oldHour = that.find('.heure .block .right .top span').text();
+              var newHour = oldHour >= 59 ? '00' : (parseInt(oldHour) < 9 ? '0' + (parseInt(oldHour) + 1) : parseInt(oldHour) + 1) ;
+              that.find('.heure .block .right .top span, .heure .block .right .bottom span').text(newHour);
+            });
+
+            that.find('.changeMin .arrow-down').click(function() {
+              var oldHour = that.find('.heure .block .right .top span').text();
+              var newHour = parseInt(oldHour) <= 0 ? '59' : (parseInt(oldHour) < 11 ? '0' + (parseInt(oldHour) - 1) : parseInt(oldHour) - 1) ;
+              that.find('.heure .block .right .top span, .heure .block .right .bottom span').text(newHour);
+            });
+
             $('.icon-clock').click(function(){
               console.log('test');
               var selectTime = '<div class="timer">';
