@@ -11,8 +11,8 @@ var options2 = {
 }
 
 $('#horlogeBig').horloge(400, options2);
-$('#horlogeMedium').horloge(200, options);
-$('#horlogeSmall').horloge(100, options);
+/*$('#horlogeMedium').horloge(200, options);
+$('#horlogeSmall').horloge(100, options);*/
 	
 	
 });

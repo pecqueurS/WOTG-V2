@@ -119,19 +119,29 @@
             horloge += '</div>';
 
             that.append(horloge);
+            arrow('left', that.find('.horloge .arrow-left'));
+            arrow('right', that.find('.horloge .arrow-right'));
+            arrow('up', that.find('.horloge .arrow-up'));
+            arrow('down', that.find('.horloge .arrow-down'));
 
+            var iconSize = parseInt(size * 32 / 400);
+            console.log(iconSize);
             // Creation icones
-            icon(that.find('.icon-calendar'), 'calendar', 32, '#dddddd');
-            icon(that.find('.icon-clock'), 'clock', 32, '#dddddd');
+            icon(that.find('.icon-calendar'), 'calendar', iconSize, '#dddddd');
+            icon(that.find('.icon-clock'), 'clock', iconSize, '#dddddd');
             $('.icon-calendar').hover(function() {
-                icon($(this), 'calendar', 32, 'rgb(0,153,255)');
+                $(this).empty();
+                icon($(this), 'calendar', iconSize, 'rgb(0,153,255)');
             }, function() {
-                icon($(this), 'calendar', 32, '#dddddd');
+                $(this).empty();
+                icon($(this), 'calendar', iconSize, '#dddddd');
             });
             $('.icon-clock').hover(function() {
-                icon($(this), 'clock', 32, 'rgb(0,153,255)');
+                $(this).empty();
+                icon($(this), 'clock', iconSize, 'rgb(0,153,255)');
             }, function() {
-                icon($(this), 'clock', 32, '#dddddd');
+                $(this).empty();
+                icon($(this), 'clock', iconSize, '#dddddd');
             });
 
 
@@ -389,7 +399,14 @@
 
             $('.icon-calendar').click(function(){
                 that.find('.horloge').append(datePicker(date));
+                backgroundCss($('.horloge .datePicker .cache'));
+                $('.horloge .datePicker .cache').show();
                 changeInputSelectDatePicker();
+
+                arrow('left', that.find('.horloge .arrow-left'));
+                arrow('right', that.find('.horloge .arrow-right'));
+                arrow('up', that.find('.horloge .arrow-up'));
+                arrow('down', that.find('.horloge .arrow-down'));
 
                 that.on('click', 'tbody td:not(.disabled, .exit)', function(){
                   that.find('td').removeClass('selected');
@@ -426,13 +443,13 @@
             that.find('.changeHour .arrow-up').click(function() {
               var oldHour = that.find('.heure .block .left .top span span').text();
               var newHour = oldHour >= 23 ? '00' : (parseInt(oldHour) < 9 ? '0' + (parseInt(oldHour) + 1) : parseInt(oldHour) + 1) ;
-              that.find('.heure .block .left .top span span, .heure .block .left .bottom span').text(newHour);
+              that.find('.heure .block .left .top span span, .heure .block .left .bottom span span').text(newHour);
             });
 
             that.find('.changeHour .arrow-down').click(function() {
               var oldHour = that.find('.heure .block .left .top span span').text();
               var newHour = parseInt(oldHour) <= 0 ? '23' : (parseInt(oldHour) < 11 ? '0' + (parseInt(oldHour) - 1) : parseInt(oldHour) - 1) ;
-              that.find('.heure .block .left .top span span, .heure .block .left .bottom span').text(newHour);
+              that.find('.heure .block .left .top span span, .heure .block .left .bottom span span').text(newHour);
             });
 
             that.find('.changeMin .arrow-up').click(function() {
@@ -448,7 +465,6 @@
             });
 
             $('.icon-clock').click(function(){
-              console.log('test');
               var selectTime = '<div class="timer">';
                     selectTime += '<div class="cache"></div>';
                     selectTime += '<div class="setTimer">';
@@ -458,6 +474,7 @@
                   selectTime += '</div>';
              
               that.find('.horloge').append(selectTime);
+              backgroundCss($('.horloge .timer > .cache'));
               that.find('.horloge .timer > .cache').show();
               fakeInputSelect( that.find('.selectHour'), hours );
               fakeInputSelect( that.find('.selectMinutes'), minutes );
@@ -488,7 +505,6 @@
 
                     var indexHour = that.find('.timer .selectHour .selected').text();
                     var indexMin = that.find('.timer .selectMinutes .selected').text();
-                    console.log(that.find('.heure .right .top span span, .heure .right .bottom span span'));
                     that.find('.heure .left .top span span, .heure .left .bottom span span').text(indexHour);
                     that.find('.heure .right .top span, .heure .right .bottom span').text(indexMin);
 
@@ -511,19 +527,40 @@
 
         }
 
-        var icon = function(element, type, size, color) {
+        var icon = function(element, type, elementSize, color) {
             var html = htmlIcon(type);
             element.append(html);
-            cssIcon(type, element, size, color);
+            cssIcon(type, element, elementSize, color);
         }
 
         var htmlIcon = function(type) {
             return eval(type + "Icon();");
         }
 
-        var cssIcon = function(type, element, size, color) {
-            eval(type + "Css(element, size, color);");
-            element.css({cursor:'pointer'});
+        var cssIcon = function(type, element, elementSize, color) {
+          console.log(type);
+            eval(type + "Css(element, elementSize, color);");
+            switch(type) {
+                case 'calendar':
+                    var cssRules = {
+                      position:'absolute',
+                      bottom: (10 / 20 * elementSize) + 'px',
+                      right: (10 / 20 * elementSize) + 'px',
+                      cursor:'pointer'
+                    };
+                    break;
+                case 'clock':
+                    var cssRules = {
+                      position:'absolute',
+                      bottom: (10 / 20 * elementSize) + 'px',
+                      left: (10 / 20 * elementSize) + 'px',
+                      cursor:'pointer'
+                    };
+                    break;
+                default:
+                    var cssRules = {};
+            } 
+            element.css(cssRules);
         }
 
         var calendarIcon = function() {
@@ -537,74 +574,72 @@
             return html;
         }
 
-        var calendarCss = function(element, size, color) {
-            console.log(color);
+        var calendarCss = function(element, elementSize, color) {
+          console.log(elementSize);
             element.css( {
                 position: 'relative',
-                width: size,
-                height:size,
+                width: elementSize,
+                height:elementSize,
             });
 
             element.find('.calendarCenter').css( {
                 position: 'absolute',
-                top: (6 / 20 * size) + 'px',
+                top: (6 / 20 * elementSize) + 'px',
                 left: '0',
-                width:(16 / 20 * size) + 'px',
-                height:(10 / 20 * size) + 'px',
-                border: (2 / 20 * size) + 'px solid ' + color,
-                borderRadius: (1 / 20 * size) + 'px'
+                width:(16 / 20 * elementSize) + 'px',
+                height:(10 / 20 * elementSize) + 'px',
+                border: (2 / 20 * elementSize) + 'px solid ' + color,
+                borderRadius: (1 / 20 * elementSize) + 'px'
             });
 
             element.find('.stickLeft').css( {
                 position: 'absolute',
                 top: '0',
-                left: (3.5 / 20 * size) + 'px',
-                width:(1.5 / 20 * size) + 'px',
-                height:(4 / 20 * size) + 'px',
-                border: (2 / 20 * size) + 'px solid ' + color,
-                borderRadius: (2 / 20 * size) + 'px'
+                left: (3.5 / 20 * elementSize) + 'px',
+                width:(1.5 / 20 * elementSize) + 'px',
+                height:(4 / 20 * elementSize) + 'px',
+                border: (2 / 20 * elementSize) + 'px solid ' + color,
+                borderRadius: (2 / 20 * elementSize) + 'px'
             });
 
             element.find('.stickRight').css( {
                 position: 'absolute',
                 top: '0',
-                right: (3.5 / 20 * size) + 'px',
-                width:(1.5 / 20 * size) + 'px',
-                height:(4 / 20 * size) + 'px',
-                border: (2 / 20 * size) + 'px solid ' + color,
-                borderRadius: (2 / 20 * size) + 'px'
+                right: (3.5 / 20 * elementSize) + 'px',
+                width:(1.5 / 20 * elementSize) + 'px',
+                height:(4 / 20 * elementSize) + 'px',
+                border: (2 / 20 * elementSize) + 'px solid ' + color,
+                borderRadius: (2 / 20 * elementSize) + 'px'
             });
 
             element.find('.headLeft').css( {
                 position: 'absolute',
-                top: (3 / 20 * size) + 'px',
+                top: (3 / 20 * elementSize) + 'px',
                 left: '0',
-                width:(5 / 20 * size) + 'px',
-                height:(5 / 20 * size) + 'px',
-                borderTopLeftRadius: (2 / 20 * size) + 'px',
+                width:(5 / 20 * elementSize) + 'px',
+                height:(5 / 20 * elementSize) + 'px',
+                borderTopLeftRadius: (2 / 20 * elementSize) + 'px',
                 background: color
             });
 
             element.find('.headRight').css( {
                 position: 'absolute',
-                top: (3 / 20 * size) + 'px',
+                top: (3 / 20 * elementSize) + 'px',
                 right: '0',
-                width:(5 / 20 * size) + 'px',
-                height:(5 / 20 * size) + 'px',
-                borderTopRightRadius: (2 / 20 * size) + 'px',
+                width:(5 / 20 * elementSize) + 'px',
+                height:(5 / 20 * elementSize) + 'px',
+                borderTopRightRadius: (2 / 20 * elementSize) + 'px',
                 background: color
             });
 
             element.find('.headCenter').css( {
                 position: 'absolute',
-                top: (3 / 20 * size) + 'px',
-                left: (7 / 20 * size) + 'px',
-                width:(6 / 20 * size) + 'px',
-                height:(5 / 20 * size) + 'px',
+                top: (3 / 20 * elementSize) + 'px',
+                left: (7 / 20 * elementSize) + 'px',
+                width:(6 / 20 * elementSize) + 'px',
+                height:(5 / 20 * elementSize) + 'px',
                 background: color
             });
-
-            
         }
 
         var clockIcon = function() {
@@ -615,40 +650,40 @@
             return html;
         }
 
-        var clockCss = function(element, size, color) {
+        var clockCss = function(element, elementSize, color) {
             element.css( {
                 position: 'relative',
-                width: size,
-                height:size,
+                width: elementSize,
+                height:elementSize,
             });
 
             element.find('.clockBackground').css( {
                 position: 'absolute',
                 top: '0',
                 left: '0',
-                width:(16 / 20 * size) + 'px',
-                height:(16 / 20 * size) + 'px',
-                border: (2 / 20 * size) + 'px solid ' + color,
+                width:(16 / 20 * elementSize) + 'px',
+                height:(16 / 20 * elementSize) + 'px',
+                border: (2 / 20 * elementSize) + 'px solid ' + color,
                 borderRadius: '50%'
             });
 
             element.find('.clockHour').css( {
                 position: 'absolute',
-                top: (9 / 20 * size) + 'px',
-                right: (9 / 20 * size) + 'px',
-                width:(6 / 20 * size) + 'px',
-                height:(2 / 20 * size) + 'px',
-                borderRadius: (1 / 20 * size) + 'px',
+                top: (9 / 20 * elementSize) + 'px',
+                right: (9 / 20 * elementSize) + 'px',
+                width:(6 / 20 * elementSize) + 'px',
+                height:(2 / 20 * elementSize) + 'px',
+                borderRadius: (1 / 20 * elementSize) + 'px',
                 background: color
             });
 
             element.find('.clockMin').css( {
                 position: 'absolute',
-                bottom: (9 / 20 * size) + 'px',
-                left: (9 / 20 * size) + 'px',
-                width:(2 / 20 * size) + 'px',
-                height:(8 / 20 * size) + 'px',
-                borderRadius: (1 / 20 * size) + 'px',
+                bottom: (9 / 20 * elementSize) + 'px',
+                left: (9 / 20 * elementSize) + 'px',
+                width:(2 / 20 * elementSize) + 'px',
+                height:(8 / 20 * elementSize) + 'px',
+                borderRadius: (1 / 20 * elementSize) + 'px',
                 background: color
             });
         }
@@ -727,6 +762,7 @@
               html += '<div class="selected">' + element.text() + '</div>';
               html += '<div class="front"></div>';
           element.html(html);
+          backgroundCss(element.find('.cache'));
         };
 
   
@@ -882,13 +918,91 @@
 
         }
 
+        var arrow = function(direction, element) {
+          switch (direction) {
+            case 'left':
+              var arrowCss = function() {
+                element.css({
+                  width: 0,
+                  height: 0, 
+                  borderTop: parseInt(size * 10 / 400) + 'px solid transparent',
+                  borderBottom: parseInt(size * 10 / 400) + 'px solid transparent', 
+                
+                  borderRight: parseInt(size * 10 / 400) + 'px solid #dddddd', 
+                  cursor:'pointer'
+                });
+              }
+              var hoverArrow = {borderRight: parseInt(size * 10 / 400) + 'px solid rgb(0, 155, 255)'};
+              break;
+            case 'right':
+              var arrowCss = function() {
+                element.css({
+                  width: 0,
+                  height: 0, 
+                  borderTop: parseInt(size * 10 / 400) + 'px solid transparent',
+                  borderBottom: parseInt(size * 10 / 400) + 'px solid transparent', 
+                
+                  borderLeft: parseInt(size * 10 / 400) + 'px solid #dddddd', 
+                  cursor:'pointer'
+                });
+              }
+              var hoverArrow = {borderLeft: parseInt(size * 10 / 400) + 'px solid rgb(0, 155, 255)'};
+              break;
+            case 'up':
+              var arrowCss = function() {
+                element.css({
+                  width: 0,
+                  height: 0, 
+                  borderLeft: parseInt(size * 10 / 400) + 'px solid transparent',
+                  borderRight: parseInt(size * 10 / 400) + 'px solid transparent',
+                
+                  borderBottom: parseInt(size * 10 / 400) + 'px solid #dddddd', 
+                  cursor:'pointer'
+                });
+              }
+              var hoverArrow = {borderBottom: parseInt(size * 10 / 400) + 'px solid rgb(0, 155, 255)'};
+              break;
+            case 'down':
+              var arrowCss = function() {
+                element.css({
+                  width: 0,
+                  height: 0, 
+                  borderLeft: parseInt(size * 10 / 400) + 'px solid transparent',
+                  borderRight: parseInt(size * 10 / 400) + 'px solid transparent',
+                
+                  borderTop: parseInt(size * 10 / 400) + 'px solid #dddddd', 
+                  cursor:'pointer'
+                });
+              }
+              var hoverArrow = {borderTop: parseInt(size * 10 / 400) + 'px solid rgb(0, 155, 255)'};
+              break;
+          }
 
+          arrowCss();
+          element.hover(
+            function() {
+              $(this).css(hoverArrow);
+            }, 
+            function() {
+              arrowCss();
+            }
+          );
 
+        }
 
+        var backgroundCss = function(element) {
+          element.css({
+            display:'none',
+            position:'fixed',
+            top:0,
+            left:0,
+            width:'100%',
+            height:'100%',
+            backgroundColor:'rgba(0,0,0,.5)'
+          });
+        }
 
-
-
-
+       
 
 
         var currentDate = dating();
@@ -923,58 +1037,6 @@
 
 $(document).ready(function() {
 
-/*  var fakeInputSelect = function(element, values) {
-    var html = '<div class="cache"></div>';
-        html += '<ul>';
-    for (var i = 0; i < values.length; i++) {
-        html += '<li>' + values[i] + '</li>';
-    };
-        html += '</ul>';
-        html += '<div class="selected">' + element.text() + '</div>';
-        html += '<div class="front"></div>';
-    element.html(html);
-  };
-
-  var months = ['JANVIER', 'FEVRIER', 'MARS', 'AVRIL', 'MAI', 'JUIN', 'JUILLET', 'AOUT', 'SEPTEMBRE', 'OCTOBRE', 'NOVEMBRE', 'DECEMBRE'];
-  var years = [2014, 2013, 2012, 2011, 2010];
-
-  fakeInputSelect($('.headerDatePicker .selectMonth'), months );
-
-  fakeInputSelect($('.headerDatePicker .selectYear'), years );
-
-  $( ".select .selected" ).bind('click', function( eventClick ){
-    var element = $(this);
-    var that = $(this).parents('.select');
-    that.find("*").css({zIndex:'150'});
-    that.find(".front, .cache, ul").show();
-    var mousePositionStart = eventClick.pageY;
-    var mousePositionEnd = eventClick.pageY + that.find('ul').height() - that.find('.selected').height() + 5;
-    var sizeMouseMove = mousePositionEnd - mousePositionStart;
-    var lengthList = (that.find('ul li')).length;
-
-    that.mousemove(function( event ) {
-      var mousePositionNow = event.pageY;
-      console.log(mousePositionNow);
-      if (mousePositionNow > mousePositionStart && mousePositionNow < mousePositionEnd) {
-        var diff = mousePositionNow - mousePositionStart;
-        that.find('ul').css({top: '-' + diff + 'px' });
-
-        var pos = parseInt(diff * lengthList / sizeMouseMove);
-        var selection = that.find('ul li').eq(pos).text();
-        console.log(selection);
-        that.find('.selected').html(selection);
-      }
-        that.find(".front").click(function() {
-          that.unbind(event);
-          that.find(".front, .cache, ul").hide();
-          that.find("*").css({zIndex:'auto'});
-    
-      });
-
-    
-    });
-  });
-*/
 
 
 
